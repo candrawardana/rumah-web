@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" type="image shortcut" href="Assets/images/logo-imigrasi.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <!-- Bootstrap Datepicker -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
+
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="Assets/css/admin.css">
+
+    <!-- Font-Awesome -->
+    <script src="https://kit.fontawesome.com/7d95cfe4de.js" crossorigin="anonymous"></script>
+
+    <title>Dashboard OPA PE DATAKE - Aplikasi Pendukung Pengelola Data Keuangan</title>
+  </head>
+  <body>
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="content">
+                <div class="header-dashboard">
+                    <div class="app-title">OPA PE DATAKE</div>
+
+                    <div class="account">
+                        <div class="user-wrapper">
+                            <div class="user-photo">
+                                <img src="Assets/images/default-user.png">
+                            </div>
+                            <div class="wrap">
+                                <div class="user-name">Abdul Aziz <i class="fa fa-chevron-down"></i></div>
+                                <div class="wrapper-dropdown">
+                                    <div class="drop-menu"><i class="fas fa-sign-out-alt"></i> Log Out</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Desktop -->
+                <div class="body-dashboard">
+                    <div class="row">
+                        <!-- menu untuk desktop -->
+                        <div class="col-lg-2 left-menu">
+                            <div class="wrapper-menu">
+                                <div class="wrapper">
+                                    <div class="wrapper-account" align="center">
+                                        <div class="account-photo">
+                                            <img src="Assets/images/default-user.png" alt="">
+                                        </div>
+                                        <div class="account-name">Abdul Aziz Laia</div>
+                                        <div class="account-title">Admin Bidang</div>
+                                    </div>
+                                </div>
+
+                                <div class="menu">Dashboard</div>
+                                <div class="menu active">Rekap Data</div>
+
+                                <div class="wrapper-log-out">
+                                    <div class="log-out" align="center">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End menu untuk desktop -->
+
+                        <div class="col-lg-10">
+                            <div class="wrapper-content-info">
+
+                                <!-- Daftar User -->
+                                <div class="wrapper-list-user">
+                                    <div class="head-list">
+                                        <div class="title-head-list">Rekap Data Nodin</div>
+                                    </div>
+
+                                    <div class="wrapper-filter">
+
+                                        <div class="input-daterange input-group" id="datepicker">
+                                            <input id="ArrivalDate" type="text" class="input-sm form-control" name="start" />
+                                            <span class="input-group-addon ml-2 mr-2 d-flex align-items-center">to</span>
+                                            <input id="DepartDate" type="text" class="input-sm form-control" name="end" />
+                                        </div>
+
+                                        <div class="wrapper-button ml-auto ">
+                                            <div class="btn button-add ">Lihat Data</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="wrapper-tabel">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Id</th>
+                                                        <th scope="col">Tanggal</th>
+                                                        <th scope="col">Judul Nota Dinas</th>
+                                                        <th scope="col">Pengirim</th>
+                                                        <th scope="col">Keterangan</th>
+                                                        <th scope="col">Status</th>
+                                                        <th scope="col">Action</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="tabel-body">ND-0012P</td>
+                                                        <td class="tabel-body">28 Februari 3000</td>
+                                                        <td class="tabel-body">Nota Dinas Lorem Ipsum</td>
+                                                        <td class="tabel-body">Abdul Aziz (Admin Bidang)</td>
+                                                        <td class="tabel-body">lorem ipsum dolor sit amet</td>
+                                                        <td class="tabel-body">
+                                                            <div class="wrapper-tabel-action">
+                                                                <div class="waiting">Menunggu</div>
+                                                                <div class="process">Diproses</div>
+                                                                <div class="delete">Ditolak</div>
+                                                                <div class="edit">Diterima</div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="tabel-body">
+                                                            <div class="wrapper-tabel-action">
+                                                                <div class="edit mr-2" style="cursor: pointer;">Lihat</div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Eend of Daftar User -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Untuk Mobile -->
+    <div class="main-mobile">
+        <div class="wrapper-mobile-menu">
+            <div class="mobile-menu" align="center">
+                <i class="fas fa-columns"></i>
+                <div class="title-menu">Dashboard</div>
+            </div>
+            <div class="mobile-menu" align="center">
+                <i class="fas fa-columns"></i>
+                <div class="title-menu">Rekap Data</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+
+    <!-- DATEPICKER -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+
+    <script>
+        $('.input-daterange')
+    	.datepicker({
+    		orientation: "auto",
+    		todayHighlight: true,
+    		autoclose: true,
+    		format: "d M yyyy",
+    		startView: "days",
+    		minViewDate: 0,
+    		maxViewDate: 0,
+    		weekStart: 1
+    	});
+
+		$('#ArrivalDate').each(function () {
+			$(this).on('changeDate', function(e) {
+				CheckIn = $(this).datepicker('getDate');
+				CheckOut = moment(CheckIn).add(1, 'day').toDate();
+				$('#DepartDate').datepicker('update', CheckOut).focus();
+			});
+		});
+
+    </script>
+</body>
+</html>

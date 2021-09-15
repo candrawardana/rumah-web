@@ -1,0 +1,342 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&family=Poppins&display=swap');
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    overflow-y: hidden;
+}
+
+:root {
+    --main-color: #6888fd;
+    --second-color: #ffffff;
+    --box-shadow: 0 3px 20px 6px rgb(151 169 204 / 10%);
+}
+
+a {
+    text-decoration: none !important;
+    color: inherit;
+}
+
+a:hover {
+    color: inherit;
+}
+
+/* Navbar */
+
+.navbar .nav-item.active {
+    border-bottom: 2px solid #6888fd;
+    color: #6888fd !important;
+}
+
+.custom-navbar {
+    background-color: #fff !important;
+    box-shadow: var(--box-shadow);
+    font-family: "Nunito", sans-serif;
+    padding: 14px 40px !important;
+}
+
+.main-button {
+    background: #00a85a;
+    color: #fff;
+    padding: 4px 25px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.main-button:hover {
+    color: #fff;
+}
+
+/* End of Navbar */
+
+/* Hero */
+
+.hero {
+    position: relative;
+    font-family: "Nunito", sans-serif;
+    margin-top: 100px;
+}
+
+.hero .title {
+    font-weight: bold;
+    font-size: 32px;
+    color: #6888fd;
+}
+
+.hero .desc {
+    font-size: 20px;
+    margin-top: 15px;
+    color: #adadad;
+}
+
+.wrapper-ilust {
+    width: 450px;
+    height: auto;
+}
+
+.wrapper-ilust .ilust {
+    width: 100%;
+    height: 100%;
+}
+
+/* End of Hero */
+
+/* Halaman Login */
+
+.login-page {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.left-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    background-image: url('../images/background.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.overlay-page {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: black;
+    opacity: 0.6;
+}
+
+.login {
+    padding: 40px 30px;
+    font-family: "Poppins", sans-serif;
+    position: relative;
+    background: rgb(186 185 199 / 40%);
+    backdrop-filter: blur(5px);
+    border-radius: 12px;
+    width: 900px;
+}
+
+.wrap-app {
+    position: relative;
+}
+
+.app-name {
+    color: #dedede;
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.logo-wrapper {
+    width: 100px;
+    height: auto;
+    margin-bottom: 30px;
+}
+
+.logo-wrapper img {
+    width: 100%;
+    height: 100%;
+}
+
+.title {
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #fff;
+}
+
+.desc {
+    font-size: 14px;
+    color: #dedede;
+    margin-top: 10px;
+}
+
+.wrapper-asset {
+    width: 450px;
+    height: auto;
+}
+
+.wrapper-asset img {
+    width: 100%;
+    height: 100%;
+}
+
+.column {
+    width: 50%;
+    position: relative;
+}
+
+.form-wrapper {
+    margin-top: 40px;
+}
+
+.label-form {
+    font-size: 15px;
+    color: #dedede;
+}
+
+.input-form {
+    display: block;
+    width: -webkit-fill-available;
+    height: calc(1em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #9ba3a7;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #dedede;
+    outline: none;
+    font-family: "Nunito", sans-serif;
+    transition: 0.3s all;
+    font-size: 14px;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+.flex-no-wrap {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.input-form::placeholder {
+    color: #abb1b4;
+    font-size: 14px;
+}
+
+.input-form:focus {
+    border-bottom: 1px solid #00a85a;
+}
+
+.forgot {
+    font-size: 13px;
+    color: #dedede;
+    cursor: pointer;
+}
+
+.wrap-forgot {
+    margin-left: auto !important;
+}
+
+.button-submit {
+    background: #00a85a;
+    color: #fff;
+    font-weight: 700;
+    font-family: "Nunito", sans-serif;
+    margin-top: 40px;
+    display: inline-block;
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+    width: 100%;
+    padding: 8px 30px;
+    border-radius: 22px;
+    text-align: center;
+}
+
+.back-login {
+    font-size: 13px;
+    margin-top: 30px;
+    color: #abb1b4 !important;
+    text-align: center;
+    cursor: pointer;
+}
+
+.copyright {
+    font-size: 13px;
+    margin-top: 40px;
+    color: #abb1b4;
+}
+
+.form-check-label {
+    color: #fff !important;
+}
+
+/* Responsvie */
+
+@media only screen and (max-width: 991px) {
+    body {
+        overflow-y: scroll;
+    }
+    .left-content {
+        display: block;
+    }
+    .login {
+        height: 100%;
+        width: 100%;
+        border-radius: 0px;
+    }
+    .copyright {
+        position: absolute;
+        bottom: 4%;
+        left: 0;
+        right: 0;
+    }
+    .main-wrap-logo {
+        display: flex;
+        justify-content: center;
+    }
+    .logo-wrapper {
+        margin-bottom: 40px;
+    }
+    .app-name::before {
+        display: none;
+    }
+    .app-name, .title, .desc {
+        padding-left: 0px;
+        text-align: center;
+    }
+    .column {
+        width: 100%;
+    }
+    .login {
+        padding: 40px 30px;
+    }
+    .second {
+        display: none;
+    }
+    .copyright {
+        text-align: center;
+    }
+}
+
+/*Scroll bar indikator yang sebelah kanan*/
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 6px;
+    border-radius: 6px;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease-in-out;
+    border-radius: 12px;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+/* Scrollbar Table Responsive */
