@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="{{ url('Assets/css/main.css') }}">
 @endsection
 @section('title')
-Masuk - OPA PE DATAKE
+Masuk
 @endsection
 @section('body')
     <div class="login-page">
@@ -16,9 +16,8 @@ Masuk - OPA PE DATAKE
                         </div>
                     </div>
 
-                    <div class="title">Rumah Tahfiz Darul Adib</div>
+                    <div class="title">{{ judul_situs() }}</div>
 
-                    <div class="desc">Lorem Ipsum Dolor Sit Amet.</div>
                     @if(session('errors'))
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             Terjadi Kesalahan :

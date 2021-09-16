@@ -22,6 +22,7 @@ class Pembelian extends Migration
             $table->string('nama',100)->nullable();
             $table->bigInteger('modal');
             $table->integer('jumlah');
+            $table->integer('terjual');
             $table->bigInteger('jual');
         });
     }

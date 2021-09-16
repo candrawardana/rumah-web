@@ -28,7 +28,6 @@ class CreateUsersTable extends Migration
 
             $table->string('alamat',100)->nullable();
             $table->rememberToken();
-            $table->string('api_token',80)->unique()->nullable();
             $table->timestamps();
         });
     }

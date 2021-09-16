@@ -2,6 +2,15 @@
 use App\Models\User;
 use App\Models\Nodin;
 
+if(!function_exists('judul_situs')){
+    function judul_situs($singkat = 0){
+        if($singkat==1){
+            return "RT Darul Adib";
+        }
+        return "Rumah Tahfiz Darul Adib";
+    }
+}
+
 if(!function_exists('tanggal_indonesia')){
     function tanggal_indonesia($tanggal){
         $tanggal_pecah=explode("-",$tanggal);

@@ -18,7 +18,7 @@
     <!-- Font-Awesome -->
     <script src="https://kit.fontawesome.com/7d95cfe4de.js" crossorigin="anonymous"></script>
 
-    <title>@yield('title','OPA PE DATAKE - Aplikasi Pendukung Pengelola Data Keuangan')
+    <title>@yield('title', judul_situs()) || {{ judul_situs() }}
     </title>
   </head>
   <body>
