@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Pembelian extends Migration
+class Berita extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,15 @@ class Pembelian extends Migration
      */
     public function up()
     {
-        Schema::create('pembelian_koperasi', function (Blueprint $table) {
+        Schema::create('berita', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('user_id')->nullable();
             $table->date('tanggal');
-            $table->string('faktur',20)->nullable();
-            $table->string('kode',20)->nullable();
-            $table->string('nama',100)->nullable();
-            $table->bigInteger('modal');
-            $table->integer('jumlah');
-            $table->integer('terjual');
-            $table->bigInteger('jual');
+            $table->string('tempat',50);
+            $table->string('title');
+            $table->text('content');
+            $table->string('thumbnail');
+            $table->timestamps();
         });
     }
 
@@ -34,6 +32,6 @@ class Pembelian extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pembelian_koperasi');
+        Schema::dropIfExists('berita');
     }
 }

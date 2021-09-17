@@ -300,4 +300,27 @@ if (!function_exists('pp_check')){
         return $pp;
     }
 }
+
+if (!function_exists('detail_pembuat')){
+    function detail_pembuat($id){
+        $name = "Akun Tidak Ditemukan";
+        $level = "tidak diketahui";
+        $photo = pp_check($id);
+        $User=User::find($id);
+        if($User){
+            $name = $User->name;
+            $level = $User->level;
+        }
+        return compact("id","name","level","photo");
+    }
+}
+
+if (!function_exists('gambar_thumbnail')){
+    function gambar_thumbnail($fitur,$id,$file){
+        if($file==null || $file == "")
+            return null;
+        return url($fitur."/".$id."/".$file);
+    }
+}
+
 ?>

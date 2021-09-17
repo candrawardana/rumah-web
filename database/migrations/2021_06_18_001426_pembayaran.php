@@ -14,8 +14,8 @@ class Pembayaran extends Migration
     public function up()
     {
         Schema::create('pembayaran_anggota', function (Blueprint $table) {
-            $table->string('id', 32)->primary();
-            $table->string('user_id',32);
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id');
             $table->date('tanggal');
             $table->string('jenis',20);
             $table->bigInteger('nilai');

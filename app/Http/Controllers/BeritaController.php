@@ -3,25 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Berita;
 class BeritaController extends Controller
 {
     //
-    public function apiberita(Request $request){
-    $berita = [
-      "id"=>"1234",
-      "thumbnail"=>"assets/ph1.png",
-      "tanggal"=>"8 Desember 2020",
-      "tempat"=>"Medan",
-      "pembuat"=>[
-        "id"=>"1234",
-        "name"=>"Ustadz Chandra",
-        "level"=>"Akademik",
-        "photo"=>"assets/ph2.png",
-      ],
-      "title"=>"Warga Palestina Iringi Pemakaman Pria yang Ditembak Tentara Israel",
-      "content"=>"Sejumlah warga membawa jenazah Raed Jadallah (39) yang tewas ditembak tentara Israel di wilayah Tepi Barat. Melansir Reuters, Rabu (1/9/2021), Kementerian Kesehatan Palestina menyebut penembakan itu terjadi di dekat desa Beit Ur Al-Tahta, sebelah barat kota Ramallah, Tepi Barat, pada Selasa (31/8) malam waktu setempat."
-    ];
-    return response()->json(['result' => 'success', 'title' => 'Kamu telah berhasil login','data'=>$berita]);
+    public function apiBerita(Request $request){
+      $berita = Berita::paginate(10);
+      foreach($berita as $b){
+        $b->pembuat = detail_pembuat($b->user_id);
+        $b->thumbnail = gambar_thumbnail("berita",$b->id,$b->thumbnail);
+      }
+      return response()->json(['result' => 'success', 'title' => 'Berita berhasil ditemukan','data'=>$berita]);
+    }
+    public function apiDetailBerita($id,Request $request){
+      $berita = Berita::find($id);
+      if(!$berita)
+        return response()->json(['result' => 'success', 'title' => 'Berita tidak ditemukan']);
+      $berita->pembuat = detail_pembuat($berita->user_id);
+      $berita->thumbnail = gambar_thumbnail("berita",$berita->id,$berita->thumbnail);
+      return response()->json(['result' => 'success', 'title' => 'Berita berhasil ditemukan','data'=>$berita]);
     }
 }

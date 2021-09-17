@@ -14,10 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/login', 'AuthController@login');
+Route::post('/login', 'AuthController@apilogin');
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
 
-Route::middleware('auth:sanctum')->get('/berita', 'BeritaController@apiBerita');
+Route::group(['middleware' => 'auth:sanctum'], function () {
+	Route::get('/berita', 'BeritaController@apiBerita');
+	Route::get('/berita/{id}', 'BeritaController@apiDetailBerita');
+});

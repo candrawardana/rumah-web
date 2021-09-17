@@ -11,6 +11,7 @@ use Session;
 use App\Models\User;
 use Ramsey\Uuid\Uuid;
 use Str;
+use App\Models\MasukSanctum;
   
 class AuthController extends Controller
 {
@@ -105,7 +106,6 @@ class AuthController extends Controller
         }
   
         $user = new User;
-        $user->id = Uuid::uuid4()->getHex();
         $user->name = ucwords(strtolower($request->name));
         $user->email = strtolower($request->email);
         $user->password = Hash::make($request->password);
@@ -129,20 +129,16 @@ class AuthController extends Controller
 
         if ($validate->fails()) {
             $respon = [
-                'status' => 'error',
-                'msg' => 'Validator error',
-                'errors' => $validate->errors(),
-                'content' => null,
+                'result' => 'error',
+                'title' => 'Gagal masuk, periksa kembali email dan password anda',
             ];
             return response()->json($respon, 200);
         } else {
             $credentials = request(['email', 'password']);
             if (!Auth::attempt($credentials)) {
                 $respon = [
-                    'status' => 'error',
-                    'msg' => 'Unathorized',
-                    'errors' => null,
-                    'content' => null,
+                    'result' => 'error',
+                    'title' => 'Gagal masuk, periksa kembali email dan password anda',
                 ];
                 return response()->json($respon, 401);
             }
@@ -152,21 +148,20 @@ class AuthController extends Controller
                 throw new \Exception('Error in Login');
             }
 
+            $checktoken = MasukSanctum::where("tokenable_id",$user->id)->first();
+            if($checktoken){
+                $checktoken->delete();
+            }
+
             $tokenResult = $user->createToken('token-auth')->plainTextToken;
             $respon = [
-                'status' => 'success',
-                'msg' => 'Login successfully',
-                'errors' => null,
-                'content' => [
-                    'status_code' => 200,
-                    'access_token' => $tokenResult,
-                    'token_type' => 'Bearer',
-                ]
+                'result' => 'success',
+                'title' => 'Berhasil Login',
+                'token' => $tokenResult,
             ];
             return response()->json($respon, 200);
         }
     }
-
     public function apilogout(Request $request) {
         $user = $request->user();
         $user->currentAccessToken()->delete();
