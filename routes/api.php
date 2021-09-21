@@ -23,4 +23,6 @@ Route::post('/login', 'AuthController@apilogin');
 Route::group(['middleware' => 'auth:sanctum'], function () {
 	Route::get('/berita', 'BeritaController@apiBerita');
 	Route::get('/berita/{id}', 'BeritaController@apiDetailBerita');
+	Route::get('/pembayaran', 'PembayaranController@apiPembayaran');
+	Route::get('/pembayaran/{id}', 'PembayaranController@apiDetailPembayaran');
 });
