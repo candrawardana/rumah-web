@@ -19,10 +19,11 @@ Route::post('/login', 'AuthController@apilogin');
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-
-Route::group(['middleware' => 'auth:sanctum'], function () {
 	Route::get('/berita', 'BeritaController@apiBerita');
 	Route::get('/berita/{id}', 'BeritaController@apiDetailBerita');
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+	Route::get('/profil', 'PenggunaController@profil');
 	Route::get('/pembayaran', 'PembayaranController@apiPembayaran');
 	Route::get('/pembayaran/{id}', 'PembayaranController@apiDetailPembayaran');
 });

@@ -132,7 +132,7 @@ class AuthController extends Controller
                 'result' => 'error',
                 'title' => 'Gagal masuk, periksa kembali email dan password anda',
             ];
-            return response()->json($respon, 200);
+            return response()->json($respon, 401);
         } else {
             $credentials = request(['email', 'password']);
             if (!Auth::attempt($credentials)) {

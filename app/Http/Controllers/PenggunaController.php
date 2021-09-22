@@ -13,7 +13,16 @@ use Redirect;
 use App\Models\User;
 class PenggunaController extends Controller
 {
-	  public function user(Request $request)
+
+    public function profil(Request $request)
+    {
+        $User = User::find(Auth::id());
+        if(!$User){
+            return response()->json(["result"=>"error","title"=>"Gagal mendapatkan data"]);
+        }
+        return response()->json(["result"=>"success","title"=>"Berhasil mendapatkan data","data"=>$User]);
+    }
+	public function user(Request $request)
     {
       if(Auth::user()->tipe!="Super Admin"){
         return "";
