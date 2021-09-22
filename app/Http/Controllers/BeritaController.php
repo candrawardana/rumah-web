@@ -8,10 +8,20 @@ class BeritaController extends Controller
 {
     //
     public function apiBerita(Request $request){
-      $berita = Berita::paginate(10);
+      $q=null;
+      $berita = Berita::orderBy("tanggal","desc");
+      if($request->has('q')){
+        if($request->q!="" && $request->q!=null){
+          $q=$request->q;
+          $berita = $berita->where("title","like","%".$q."%")->orWhere("content","like","%".$q."%");
+        }
+      }
+      $berita = $berita->paginate(10);
+      $berita->appends(['q' => $q]);
       foreach($berita as $b){
         $b->pembuat = detail_pembuat($b->user_id);
         $b->thumbnail = gambar_thumbnail("berita",$b->id,$b->thumbnail);
+        $b->content = substr($b->content, 0,150)."...lihat selengkapnya";
       }
       return response()->json(['result' => 'success', 'title' => 'Berita berhasil ditemukan','data'=>$berita]);
     }
