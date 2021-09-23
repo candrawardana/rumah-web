@@ -13,7 +13,14 @@ class Banner extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('banner', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->date('tanggal');
+            $table->string('thumbnail');
+            $table->string('fitur');
+            $table->string('url_related');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +30,6 @@ class Banner extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('banner');
     }
 }

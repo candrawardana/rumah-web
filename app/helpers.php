@@ -132,4 +132,9 @@ if (!function_exists('gambar_thumbnail')){
     }
 }
 
+if (!function_exists('gambar_second')){
+    function gambar_second($link){
+        return ENV("APP_URL_SECOND","http://localhost").$link;
+    }
+}
 ?>

@@ -28,7 +28,7 @@ class BeritaController extends Controller
     public function apiDetailBerita($id,Request $request){
       $berita = Berita::find($id);
       if(!$berita)
-        return response()->json(['result' => 'success', 'title' => 'Berita tidak ditemukan']);
+        return response()->json(['result' => 'error', 'title' => 'Berita tidak ditemukan']);
       $berita->pembuat = detail_pembuat($berita->user_id);
       $berita->thumbnail = gambar_thumbnail("berita",$berita->id,$berita->thumbnail);
       return response()->json(['result' => 'success', 'title' => 'Berita berhasil ditemukan','data'=>$berita]);

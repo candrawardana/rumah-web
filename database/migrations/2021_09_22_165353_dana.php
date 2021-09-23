@@ -13,7 +13,11 @@ class Dana extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('dana', function (Blueprint $table) {
+            $table->string('jenis',8);
+            $table->bigInteger('dana');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +27,6 @@ class Dana extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('dana');
     }
 }

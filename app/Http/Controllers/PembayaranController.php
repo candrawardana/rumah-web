@@ -12,7 +12,7 @@ class PembayaranController extends Controller
       if(Auth::user()->jenis!="superadmin"){
         $pembayaran = $pembayaran->where("user_id",Auth::user()->id);
       }
-      $pembayaran = $pembayaran->paginate(50);
+      $pembayaran = $pembayaran->paginate(15);
       foreach($pembayaran as $b){
         $b->pembuat = detail_pembuat($b->user_id);
       }
@@ -21,7 +21,7 @@ class PembayaranController extends Controller
     public function apiDetailPembayaran($id,Request $request){
       $pembayaran = Pembayaran::find($id);
       if(!$pembayaran)
-        return response()->json(['result' => 'success', 'title' => 'Pembayaran tidak ditemukan']);
+        return response()->json(['result' => 'error', 'title' => 'Pembayaran tidak ditemukan']);
       $pembayaran->pembuat = detail_pembuat($pembayaran->user_id);
       return response()->json(['result' => 'success', 'title' => 'Pembayaran berhasil ditemukan','data'=>$pembayaran]);
     }
