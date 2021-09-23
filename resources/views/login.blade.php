@@ -41,24 +41,34 @@ Masuk
                             {{ Session::get('error') }}
                         </div>
                     @endif
+                    @if (Session::has('info'))
+                        <div class="alert alert-info">
+                            {{ Session::get('info') }}
+                        </div>
+                    @endif
                     <div class="form-wrapper" style="text-align: start;">
                         <form action="{{ route('login') }}" method="post">
                             @csrf
+                            @if (Session::has('info'))
                             <div class="form-group">
-                                <label for="email" class="label-form">User/Pengguna</label>
-                                <input type="text" class="input-form" name="email" autofocus required placeholder="Nama Akun / Email">
+                                <label class="label-form">Ayah atau Ibunya?</label>
+                                <input type="radio" class="input-form" name="orang_tua" value=1> Ayah<br>
+                                <input type="radio" class="input-form" name="orang_tua" value=0> Ibu<br>
+                                <input type="hidden" name="username" value="{{ Session::get('info_username') }}">
+                                <input type="hidden" name="password" value="{{ Session::get('info_password') }}">
+                            </div>
+                            @else
+                            <div class="form-group">
+                                <label for="email" class="label-form">Username / Email</label>
+                                <input type="text" class="input-form" name="username" autofocus required placeholder="Nama Akun / Email">
                             </div>
 
                             <div class="form-group">
                                 <label for="password" class="label-form">Password</label>
                                 <input type="password" class="input-form" name="password" required placeholder="********">
                             </div>
-
+                            @endif
                             <div class="flex-no-wrap">
-                                <div class="form-group form-check" style="font-size: 13px;">
-                                    <input type="checkbox" class="form-check-input" id="rememberMe">
-                                    <label class="form-check-label" for="rememberMe">Ingat saya</label>
-                                </div>
 
                                 <div class="wrap-forgot">
                                     <a href="{{ url('lupa') }}">

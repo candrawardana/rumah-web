@@ -19,6 +19,8 @@ Route::post('/login', 'AuthController@apilogin');
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+Route::get('/kegiatan', 'KegiatanController@apiKegiatan');
+Route::get('/kegiatan/{id}', 'KegiatanController@apiDetailKegiatan');
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
 	Route::get('/profil', 'PenggunaController@profil');
@@ -33,4 +35,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 	Route::get('/santri/{id}/hafalan', 'SantriController@apiHafalanSantri');
 	Route::get('/santri/{id}/hafalan-baru', 'SantriController@apiHafalanBaruSantri');
 	Route::get('/santri/{id}/kesalahan', 'SantriController@apiKesalahanSantri');
+
+	Route::get('/pengumuman', 'PengumumanController@apiPengumuman');
 });
