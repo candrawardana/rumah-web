@@ -7,15 +7,19 @@ use App\Models\Pembayaran;
 use Illuminate\Support\Facades\Auth;
 use App\Models\WaliOrangTua;
 use App\Models\Santri;
+use App\Models\Ayah;
+use App\Models\Ibu;
 use App\Models\Hafalan;
 use App\Models\HafalanBaru;
 use App\Models\Kesalahan;
+use App\Models\Tabungan;
+use App\Models\UangSyariah;
 
 class SantriController extends Controller
 {
     public function apiSantri(Request $request){
         $WaliOrangTua = WaliOrangTua::orderBy("nis_santri","asc")
-//            ->where("user_id",Auth::id()
+            ->where("user_id",Auth::id())
             ->get();
         $SantriID = [];
         foreach($WaliOrangTua as $w){
@@ -33,15 +37,36 @@ class SantriController extends Controller
     }
     public function apiDetailSantri($id,Request $request){
       $Santri = Santri::where("s_nis",$id)->first();
-      if(!$Santri){
+      $WaliOrangTua = WaliOrangTua::where("nis_santri",$id)
+            ->where("user_id",Auth::id())
+            ->first();
+      if(!$Santri || !$WaliOrangTua){
         return response()->json(['result' => 'error', 'title' => 'Santri tidak ditemukan']);
       }
       $Santri->foto = gambar_second($Santri->s_foto);
-      return response()->json(['result' => 'success', 'title' => 'Santri berhasil ditemukan','data'=>$Santri]);
+      $Ayah = Ayah::where("s_nis",$id)->first();
+      $Ibu = Ibu::where("s_nis",$id)->first();
+      $Hafalan = Hafalan::where("s_nis",$id)->orderBy("h_id","desc")->get();
+      $HafalanBaru = HafalanBaru::where("s_nis",$id)->orderBy("hb_id","desc")->get();
+      $Kesalahan = Kesalahan::where("s_nis",$id)->orderBy("id","desc")->get();
+      $Tabungan = Tabungan::where("s_nis",$id)->orderBy("id","desc")->get();
+      $UangSyariah = UangSyariah::where("s_nis",$id)->orderBy("id","desc")->get();
+
+      return response()->json(['result' => 'success', 'title' => 'Santri berhasil ditemukan',
+        'data'=>$Santri,'Ayah'=>$Ayah,'Ibu'=>$Ibu,
+        'Hafalan'=>$Hafalan,
+        'HafalanBaru'=>$HafalanBaru,
+        'Kesalahan'=>$Kesalahan,
+        'Tabungan'=>$Tabungan,
+        'UangSyariah'=>$UangSyariah,
+      ]);
     }
     public function apiHafalanSantri($id,Request $request){
       $Santri = Santri::where("s_nis",$id)->select("s_nis","s_nama","s_foto")->first();
-      if(!$Santri){
+      $WaliOrangTua = WaliOrangTua::where("nis_santri",$id)
+            ->where("user_id",Auth::id())
+            ->first();
+      if(!$Santri || !$WaliOrangTua){
         return response()->json(['result' => 'error', 'title' => 'Santri tidak ditemukan']);
       }
       $Santri->foto = gambar_second($Santri->s_foto);
@@ -50,7 +75,10 @@ class SantriController extends Controller
     }
     public function apiHafalanBaruSantri($id,Request $request){
       $Santri = Santri::where("s_nis",$id)->select("s_nis","s_nama","s_foto")->first();
-      if(!$Santri){
+      $WaliOrangTua = WaliOrangTua::where("nis_santri",$id)
+            ->where("user_id",Auth::id())
+            ->first();
+      if(!$Santri || !$WaliOrangTua){
         return response()->json(['result' => 'error', 'title' => 'Santri tidak ditemukan']);
       }
       $Santri->foto = gambar_second($Santri->s_foto);
@@ -59,7 +87,10 @@ class SantriController extends Controller
     }
     public function apiKesalahanSantri($id,Request $request){
       $Santri = Santri::where("s_nis",$id)->select("s_nis","s_nama","s_foto")->first();
-      if(!$Santri){
+      $WaliOrangTua = WaliOrangTua::where("nis_santri",$id)
+            ->where("user_id",Auth::id())
+            ->first();
+      if(!$Santri || !$WaliOrangTua){
         return response()->json(['result' => 'error', 'title' => 'Santri tidak ditemukan']);
       }
       $Santri->foto = gambar_second($Santri->s_foto);

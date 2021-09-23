@@ -16,10 +16,11 @@ class PenggunaController extends Controller
 
     public function profil(Request $request)
     {
-        $User = User::find(Auth::id());
+        $User = Auth::user();
         if(!$User){
             return response()->json(["result"=>"error","title"=>"Gagal mendapatkan data"]);
         }
+        $User->foto = pp_check($User->id);
         return response()->json(["result"=>"success","title"=>"Berhasil mendapatkan data","data"=>$User]);
     }
 	public function user(Request $request)
