@@ -16,7 +16,7 @@ class KegiatanController extends Controller
           $Kegiatan = $Kegiatan->where("kg_judul","like","%".$q."%")->orWhere("kg_desc","like","%".$q."%");
         }
       }
-      $Kegiatan = $Kegiatan->paginate(5);
+      $Kegiatan = $Kegiatan->paginate(10);
       $Kegiatan->appends(['q' => $q]);
       foreach($Kegiatan as $b){
         $b->kg_foto = gambar_second("/foto/kegiatan/".explode("|",$b->kg_foto)[0]);
@@ -45,13 +45,13 @@ class KegiatanController extends Controller
           $Kegiatan = $Kegiatan->where("kg_judul","like","%".$q."%")->orWhere("kg_desc","like","%".$q."%");
         }
       }
-      $Kegiatan = $Kegiatan->paginate(5);
+      $Kegiatan = $Kegiatan->paginate(6);
       $Kegiatan->appends(['q' => $q]);
       foreach($Kegiatan as $b){
         $b->kg_foto = gambar_second("/foto/kegiatan/".explode("|",$b->kg_foto)[0]);
         $b->kg_desc = substr($b->kg_desc, 0,150)."...lihat selengkapnya";
       }
-      return response()->json(['result' => 'success', 'title' => 'Kegiatan berhasil ditemukan','data'=>$Kegiatan]);
+      return view("normal.semua-kegiatan",compact("Kegiatan","q"));
     }
     public function webDetailKegiatan($id,Request $request){
       $Kegiatan = Kegiatan::where("kg_id",$id)->first();

@@ -255,9 +255,7 @@ class AuthController extends Controller
   
         Auth::attempt($data);
   
-        if (Auth::check()) { // true sekalian session field di users nanti bisa dipanggil via Auth
-            //Login Success
-            return redirect()->route('home');
+        if (Auth::check()) {
   
         } else { // false
             $User = User::where("email",$request->input('username'))->first();
@@ -268,85 +266,85 @@ class AuthController extends Controller
                 ];
                 Auth::attempt($data);
             }
-        }
-        $Santri = Santri::where("s_nis",$request->username)->where("s_password",$request->password)->first();
-        if($Santri){
-            $ortu = -1;
-            if($request->has("orang_tua")){
-                $ortu = $request->orang_tua;
-            }
-            if($ortu>=0){
-                if($request->orang_tua==1){
-                    $Ayah = Ayah::where("s_nis",$request->username)->first();
-                    if($Ayah){
-                        $User = User::where("username",$Ayah->a_id)->first();
-                        if(!$User){
-                            $User = new User();
-                            $User->name = $Ayah->a_nama;
-                            $User->username = $Ayah->a_id;
-                            $User->label_id = $Ayah->a_id;
-                            $User->password = Hash::make($request->password);
-                            $User->jenis = "ayah_santri";
-                            $User->pekerjaan = $Ayah->a_pekerjaan;
-                            $User->pendidikan = $Ayah->a_pendidikan;
-                            $User->hp = $Ayah->a_telp;
-                            $User->wa = $Ayah->a_wa;
-                            $User->alamat = $Ayah->a_alamat;
-                            $User->lahir = $Ayah->a_tmplahir.", ".$Ayah->a_tgllahir;
-                            $User->save();
+            $Santri = Santri::where("s_nis",$request->username)->where("s_password",$request->password)->first();
+            if($Santri){
+                $ortu = -1;
+                if($request->has("orang_tua")){
+                    $ortu = $request->orang_tua;
+                }
+                if($ortu>=0){
+                    if($request->orang_tua==1){
+                        $Ayah = Ayah::where("s_nis",$request->username)->first();
+                        if($Ayah){
+                            $User = User::where("username",$Ayah->a_id)->first();
+                            if(!$User){
+                                $User = new User();
+                                $User->name = $Ayah->a_nama;
+                                $User->username = $Ayah->a_id;
+                                $User->label_id = $Ayah->a_id;
+                                $User->password = Hash::make($request->password);
+                                $User->jenis = "ayah_santri";
+                                $User->pekerjaan = $Ayah->a_pekerjaan;
+                                $User->pendidikan = $Ayah->a_pendidikan;
+                                $User->hp = $Ayah->a_telp;
+                                $User->wa = $Ayah->a_wa;
+                                $User->alamat = $Ayah->a_alamat;
+                                $User->lahir = $Ayah->a_tmplahir.", ".$Ayah->a_tgllahir;
+                                $User->save();
+                            }
+                            $data = [
+                                'username'     => $Ayah->a_id,
+                                'password'  => $request->input('password'),
+                            ];
+                            Auth::attempt($data);                  
                         }
-                        $data = [
-                            'username'     => $Ayah->a_id,
-                            'password'  => $request->input('password'),
-                        ];
-                        Auth::attempt($data);                  
                     }
-                }
-                if($request->orang_tua==0){
-                    $Ibu = Ibu::where("s_nis",$request->username)->first();
-                    if($Ibu){
-                        $User = User::where("username",$Ibu->a_id)->first();
-                        if(!$User){
-                            $User = new User();
-                            $User->name = $Ibu->i_nama;
-                            $User->username = $Ibu->i_id;
-                            $User->label_id = $Ibu->i_id;
-                            $User->password = Hash::make($request->password);
-                            $User->jenis = "ibu_santri";
-                            $User->pekerjaan = $Ibu->i_pekerjaan;
-                            $User->pendidikan = $Ibu->i_pendidikan;
-                            $User->hp = $Ibu->i_telp;
-                            $User->wa = $Ibu->i_wa;
-                            $User->alamat = $Santri->s_alamat;
-                            $User->lahir = $Ibu->i_tmplahir.", ".$Ibu->i_tgllahir;
-                            $User->save();
+                    if($request->orang_tua==0){
+                        $Ibu = Ibu::where("s_nis",$request->username)->first();
+                        if($Ibu){
+                            $User = User::where("username",$Ibu->a_id)->first();
+                            if(!$User){
+                                $User = new User();
+                                $User->name = $Ibu->i_nama;
+                                $User->username = $Ibu->i_id;
+                                $User->label_id = $Ibu->i_id;
+                                $User->password = Hash::make($request->password);
+                                $User->jenis = "ibu_santri";
+                                $User->pekerjaan = $Ibu->i_pekerjaan;
+                                $User->pendidikan = $Ibu->i_pendidikan;
+                                $User->hp = $Ibu->i_telp;
+                                $User->wa = $Ibu->i_wa;
+                                $User->alamat = $Santri->s_alamat;
+                                $User->lahir = $Ibu->i_tmplahir.", ".$Ibu->i_tgllahir;
+                                $User->save();
+                            }
+                            $data = [
+                                'username'     => $Ibu->i_id,
+                                'password'  => $request->input('password'),
+                            ];
+                            Auth::attempt($data);
                         }
-                        $data = [
-                            'username'     => $Ibu->i_id,
-                            'password'  => $request->input('password'),
-                        ];
-                        Auth::attempt($data);
+                    }
+                    if (Auth::check()) {
+                        $WaliOrangTua = WaliOrangTua::where("nis_santri",$Santri->s_nis)
+                            ->where("user_id",Auth::id())
+                            ->first();
+                        if(!$WaliOrangTua){
+                            $WaliOrangTua = new WaliOrangTua();
+                            $WaliOrangTua->nis_santri = $Santri->s_nis;
+                            $WaliOrangTua->user_id = Auth::id();
+                            $WaliOrangTua->save();
+                        }
                     }
                 }
-                if (Auth::check()) {
-                    $WaliOrangTua = WaliOrangTua::where("nis_santri",$Santri->s_nis)
-                        ->where("user_id",Auth::id())
-                        ->first();
-                    if(!$WaliOrangTua){
-                        $WaliOrangTua = new WaliOrangTua();
-                        $WaliOrangTua->nis_santri = $Santri->s_nis;
-                        $WaliOrangTua->user_id = Auth::id();
-                        $WaliOrangTua->save();
-                    }
+                else{
+                    //Login Fail
+                    $respon = [
+                    'result' => 'info',
+                    'title' => 'orang tua',
+                    ];
+                    return response()->json($respon,200);
                 }
-            }
-            else{
-                //Login Fail
-                $respon = [
-                'result' => 'info',
-                'title' => 'orang tua',
-                ];
-                return response()->json($respon,200);
             }
         }
         if (!Auth::check()) {

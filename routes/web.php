@@ -19,12 +19,13 @@ Route::get('policy', 'DashboardController@policy')->name('policy');
 
 Route::get('login', 'AuthController@showFormLogin')->name('login');
 Route::post('login', 'AuthController@login');
-Route::get('register', 'AuthController@showFormRegister')->name('register');
-Route::post('register', 'AuthController@register');
 Route::get('pp/{id}/{file}', 'PenggunaController@lihat');
 
 Route::get('/kegiatan', 'KegiatanController@webKegiatan');
 Route::get('/kegiatan/{id}', 'KegiatanController@webDetailKegiatan');
+
+Route::get('/berita', 'BeritaController@webBerita');
+Route::get('/berita/{id}', 'BeritaController@webDetailBerita');
 
 Route::get('/gallery/{file}', 'DashboardController@gallery');
 
