@@ -134,29 +134,11 @@
   </div>
 
   <div class="row card">
-
+    @foreach($Gallery as $g)
     <div class="col s12 m6 l4">
-      <img src="img/gallery/a.jpg" class="materialbox materialboxed responsive-img card">
+      <img src="{{ $g }}" class="materialbox materialboxed responsive-img card">
     </div>
-    <div class="col s12 m6 l4">
-      <img src="img/gallery/b.jpg" class="materialbox materialboxed responsive-img card">
-    </div>
-    <div class="col s12 m6 l4">
-      <img src="img/gallery/c.jpg" class="materialbox materialboxed responsive-img card">
-    </div>
-
-
-    <div class="col s12 m6 l4">
-      <img src="img/gallery/d.jpg" class="materialbox materialboxed responsive-img card">
-    </div>
-
-    <div class="col s12 m6 l4">
-      <img src="img/gallery/e.jpg" class="materialbox materialboxed responsive-img card">
-    </div>
-    <div class="col s12 m6 l4">
-      <img src="img/gallery/f.jpg" class="materialbox materialboxed responsive-img card">
-    </div>
-
+    @endforeach
   </div>
 
 </div>

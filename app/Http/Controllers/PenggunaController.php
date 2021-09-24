@@ -141,9 +141,6 @@ class PenggunaController extends Controller
         return Redirect::back();
     }
     public function lihat($id,$file="-"){
-        if(!Auth::user()){
-            return "tidak bisa membuka karena tidak ada akses";
-        }
         if(Storage::exists("pp/".$id."/".$file)){
             if(request()->has('download'))
                 return Storage::download("pp/".$id."/".$file);

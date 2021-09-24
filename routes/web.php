@@ -21,9 +21,12 @@ Route::get('login', 'AuthController@showFormLogin')->name('login');
 Route::post('login', 'AuthController@login');
 Route::get('register', 'AuthController@showFormRegister')->name('register');
 Route::post('register', 'AuthController@register');
+Route::get('pp/{id}/{file}', 'PenggunaController@lihat');
 
 Route::get('/kegiatan', 'KegiatanController@webKegiatan');
 Route::get('/kegiatan/{id}', 'KegiatanController@webDetailKegiatan');
+
+Route::get('/gallery/{file}', 'DashboardController@gallery');
 
 Route::group(['middleware' => 'auth'], function () {
 
@@ -42,8 +45,6 @@ Route::group(['middleware' => 'auth'], function () {
     // Route::get('rekap/{status?}', 'NodinController@rekap')->name('nodin');
     // Route::get('rekap-export/{status?}', 'NodinController@export');
     Route::get('logout', 'AuthController@logout')->name('logout'); 
-
-    Route::get('pp/{id}/{file}', 'PenggunaController@lihat');
     Route::post('ganti-pp', 'PenggunaController@ppupload');
     Route::get('hapus-pp', 'PenggunaController@pphapus');
 

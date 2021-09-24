@@ -17,6 +17,7 @@ use App\Models\Pegawai;
 use Ramsey\Uuid\Uuid;
 use Str;
 use App\Models\MasukSanctum;
+use Storage;
   
 class AuthController extends Controller
 {
@@ -75,6 +76,7 @@ class AuthController extends Controller
             }
         }
         $Santri = Santri::where("s_nis",$request->username)->where("s_password",$request->password)->first();
+        $Pegawai = Pegawai::where("p_username",$request->username)->where("p_password",$request->password)->first();
         if($Santri){
             if($request->has("orang_tua")){
                 if($request->orang_tua==1){
@@ -138,9 +140,7 @@ class AuthController extends Controller
                         $WaliOrangTua->nis_santri = $Santri->s_nis;
                         $WaliOrangTua->user_id = Auth::id();
                         $WaliOrangTua->save();
-                    }
-                    return redirect()->route('home');
-          
+                    }          
                 }
             }
             else{
@@ -150,6 +150,38 @@ class AuthController extends Controller
                 Session::flash('info_password', $request->password);
                 return redirect()->route('login');
             }
+        }
+        else if($Pegawai){
+            $User = User::where("username",$Pegawai->p_username)->first();
+            if(!$User){
+                $User = new User();
+                $User->name = $Pegawai->p_nama;
+                $User->username = $Pegawai->p_username;
+                $User->email = $Pegawai->p_email;
+                $User->label_id = $Pegawai->p_induk;
+                $User->password = Hash::make($request->password);
+                $User->jenis = $Pegawai->p_level;
+                $User->pekerjaan = $Pegawai->p_jabatan;
+                $User->hp = $Pegawai->p_telp;
+                $User->alamat = $Pegawai->p_alamat;
+                $User->save();
+                $host = gambar_second($Pegawai->p_foto);
+                $ch = curl_init($host);
+                curl_setopt($ch, CURLOPT_HEADER, 0);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
+                $result = curl_exec($ch);
+                curl_close($ch);
+                Storage::makeDirectory("pp/".$User->id);
+                $fp = fopen(Storage::path("pp/".$User->id."/convert.jpg",$result),'x');
+                fwrite($fp, $result);
+                fclose($fp);
+
+            }
+            Auth::attempt($data);
+        }
+        if (Auth::check()) {
+            return redirect()->route('home');
         }
         //Login Fail
         Session::flash('error', 'Nama Akun, Email atau password salah');
