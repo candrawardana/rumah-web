@@ -13,9 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'DashboardController@welcome')->name('welcome');
+Route::get('policy', 'DashboardController@policy')->name('policy');
 
 
 Route::get('login', 'AuthController@showFormLogin')->name('login');
@@ -23,9 +22,14 @@ Route::post('login', 'AuthController@login');
 Route::get('register', 'AuthController@showFormRegister')->name('register');
 Route::post('register', 'AuthController@register');
 
+Route::get('/kegiatan', 'KegiatanController@webKegiatan');
+Route::get('/kegiatan/{id}', 'KegiatanController@webDetailKegiatan');
 
 Route::group(['middleware' => 'auth'], function () {
- 
+
+    Route::get('/pengumuman', 'PengumumanController@webPengumuman');
+
+
     Route::get('home', 'DashboardController@home')->name('home');
     Route::get('user', 'PenggunaController@user')->name('user');
     Route::post('user/save', 'PenggunaController@save');

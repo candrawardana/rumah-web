@@ -11,4 +11,8 @@ class PengumumanController extends Controller
       $Pengumuman = Pengumuman::orderBy("pg_tanggal","desc")->get();
       return response()->json(['result' => 'success', 'title' => 'Pengumuman berhasil ditemukan','data'=>$Pengumuman]);
     }
+    public function webPengumuman(Request $request){
+      $Pengumuman = Pengumuman::orderBy("pg_tanggal","desc")->get();
+      return view("normal.pengumuman",compact("Pengumuman"));
+    }
 }

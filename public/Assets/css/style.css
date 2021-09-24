@@ -1,0 +1,62 @@
+body {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
+
+main {
+	flex: 1 0 auto;
+}
+.laporan {
+	font-size: 10px;
+}
+.menutext {
+	font-size: 35px;
+	vertical-align: top;
+}
+.sidenav-trigger {
+	@extend .red, .darken-2;
+}
+.btn-opsi {
+	width: 100%;
+	margin-bottom: 8px;
+	text-align: left;
+}
+.content-text {
+	font-size: 30px;
+	padding-left: 10px;
+}
+.content-title {
+	border-bottom: 1px solid #dddddd;
+	padding-bottom: 20px;
+	margin-top: 20px;
+}
+.foto-profil {
+	width: 100%;
+	height: 500px;
+	object-fit: cover;
+	border: 8px solid white;
+}
+.foto-kegiatan {
+	width: 100%;
+	height: 100%px;
+	object-fit: cover;
+	margin-top: 20px;
+}
+.card-image{
+	height: 150px;
+	overflow: hidden;
+}
+.foto-circle {
+	object-fit: cover!important;
+}
+.txt-nama {
+	text-shadow: 1px 1px 4px darkgrey;
+}
+.ic {
+	vertical-align: bottom;
+}
+.app-logo {
+	align-items: baseline;
+	margin-top: 200px;
+}

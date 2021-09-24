@@ -137,4 +137,10 @@ if (!function_exists('gambar_second')){
         return ENV("APP_URL_SECOND","http://localhost").$link;
     }
 }
+
+if (!function_exists('penempatan')){
+    function penempatan($link){
+        return ENV($link,"-");
+    }
+}
 ?>
