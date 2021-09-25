@@ -15,6 +15,8 @@ use App\Models\Kesalahan;
 use App\Models\Tabungan;
 use App\Models\UangSyariah;
 
+use App\Models\Dana;
+
 class SantriController extends Controller
 {
     public function apiSantri(Request $request){
@@ -96,5 +98,45 @@ class SantriController extends Controller
       $Santri->foto = gambar_second($Santri->s_foto);
       $Kesalahan = Kesalahan::where("s_nis",$id)->orderBy("id","desc")->get();
       return response()->json(['result' => 'success', 'title' => 'Santri berhasil ditemukan','santri'=>$Santri, 'data'=>$Kesalahan]);
+    }
+    public function webSantri(Request $request){
+        $q="";
+        $WaliOrangTua = WaliOrangTua::orderBy("nis_santri","asc")
+            ->where("user_id",Auth::id())
+            ->get();
+        $SantriID = [];
+        foreach($WaliOrangTua as $w){
+            $s = Santri::where("s_nis",$w->nis_santri)->select("s_nis")->first();
+            if(!$s)
+                $w->delete();
+            else
+                array_push($SantriID,$s->s_nis);
+        }
+        $Santri = Santri::select("s_nis","s_nama","s_foto");
+        if(Auth::user()->jenis=="Ustadz" || Auth::user()->jenis=="Administrator"){
+        }
+        else{
+            $Santri = Santri::whereIn("s_nis",$SantriID);
+        }
+        if($request->has('q')){
+            if($request->q!="" && $request->q!=null){
+                $q=$request->q;
+                $Santri = $Santri->where("s_nama","like","%".$q."%")->orWhere("s_panggilan","like","%".$q."%");
+            }
+        }
+        $Santri = $Santri->paginate(50);
+        $Santri->appends(['q' => $q]);
+        foreach($Santri as $s){
+            $s->foto = gambar_second($s->s_foto);
+            $Ayah=Ayah::where("s_nis",$s->s_nis)->first();
+            $s->ayah = "-";
+            if($Ayah)
+                $s->ayah=$Ayah->a_nama;
+            $s->tabungan=0;
+            $Dana = Dana::where("related_id",$s->s_nis)->where("jenis","tabungan")->first();
+            if($Dana)
+                $s->tabungan = $Dana->dana;
+        }
+        return view("normal.semua-santri",compact("Santri","q"));
     }
 }

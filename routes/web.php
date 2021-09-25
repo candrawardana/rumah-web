@@ -32,7 +32,7 @@ Route::get('/gallery/{file}', 'DashboardController@gallery');
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/pengumuman', 'PengumumanController@webPengumuman');
-
+    Route::get('/santri', 'SantriController@webSantri');
 
     Route::get('home', 'DashboardController@home')->name('home');
     Route::get('user', 'PenggunaController@user')->name('user');
