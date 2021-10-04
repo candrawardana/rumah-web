@@ -143,4 +143,15 @@ if (!function_exists('penempatan')){
         return ENV($link,"-");
     }
 }
+
+if (!function_exists('nomor')){
+    function nomor($nomor){
+        return number_format(
+            $nomor,
+            0, // number of decimal places
+            ',', // character to use as decimal point
+            '.' // character to use as thousands separator
+        );
+    }
+}
 ?>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use App\Models\Kegiatan;
 use Storage;
+use Auth;
 
 class DashboardController extends Controller
 {
@@ -31,7 +32,9 @@ class DashboardController extends Controller
 
     public function home()
     {
-        return view('admin.home');
+        if(Auth::user()->jenis=="Administrator")
+            return view('admin.home');
+        return redirect("/");
     }
     public function gallery($file){
         if(Storage::exists("gallery/".$file)){

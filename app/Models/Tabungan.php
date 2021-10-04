@@ -11,4 +11,5 @@ class Tabungan extends Model
     protected $connection = 'mysql2';
     protected $table = 'tabungan';
     public $incrementing = false;
+    public $timestamps = false;
 }

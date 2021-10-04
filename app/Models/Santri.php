@@ -11,6 +11,7 @@ class Santri extends Model
     protected $connection = 'mysql2';
     protected $table = 'santri';
     public $incrementing = false;
+    public $timestamps = false;
 
     protected $hidden = [
         's_password'

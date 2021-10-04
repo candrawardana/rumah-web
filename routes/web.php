@@ -33,6 +33,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/pengumuman', 'PengumumanController@webPengumuman');
     Route::get('/santri', 'SantriController@webSantri');
+    Route::get('/santri/{id}', 'SantriController@webDetailSantri');
+    Route::get('/santri/{id}/kesalahan', 'SantriController@webKesalahanSantri');
 
     Route::get('home', 'DashboardController@home')->name('home');
     Route::get('user', 'PenggunaController@user')->name('user');
@@ -48,5 +50,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('logout', 'AuthController@logout')->name('logout'); 
     Route::post('ganti-pp', 'PenggunaController@ppupload');
     Route::get('hapus-pp', 'PenggunaController@pphapus');
+
+    Route::get('migrasi/tabungan', 'MigrasiDataController@tabungan');
+    Route::get('migrasi/hafalan', 'MigrasiDataController@hafalan');
+    Route::get('migrasi/hafalan-baru', 'MigrasiDataController@hafalanBaru');
+    Route::get('migrasi/kesalahan', 'MigrasiDataController@kesalahan');
+    Route::get('migrasi/uang-syariah', 'MigrasiDataController@uangSyariah');
 
 });

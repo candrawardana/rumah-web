@@ -41,7 +41,7 @@ Santri
           <td>{{ $s->s_nis }}</td>
           <td>{{ $s->s_nama }}</td>
           <td>{{ $s->ayah }}</td>
-          <td><span class="left">Rp. </span><span class="right" style="padding-right: 20px">{{ $s->tabungan }}</span></td>
+          <td><span class="left">Rp. </span><span class="right" style="padding-right: 20px">{{ nomor($s->tabungan) }}</span></td>
           <td>
             <a class="tooltipped green-text" data-position="bottom" data-tooltip="Profil {{ $s->s_nama }}" 
                               href="{{ url('santri/'.$s->s_nis) }}"><i class="material-icons">person</i></a>

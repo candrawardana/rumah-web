@@ -11,4 +11,5 @@ class UangSyariah extends Model
     protected $connection = 'mysql2';
     protected $table = 'uangsyariah';
     public $incrementing = false;
+    public $timestamps = false;
 }

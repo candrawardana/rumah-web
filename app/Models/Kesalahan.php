@@ -11,4 +11,5 @@ class Kesalahan extends Model
     protected $connection = 'mysql2';
     protected $table = 'kesalahan';
     public $incrementing = false;
+    public $timestamps = false;
 }
