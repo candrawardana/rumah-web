@@ -3,11 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="{{ url('Assets/images/icon.png') }}?d=2" type="image/png">
   <title>@yield('title',judul_situs()) || {{ judul_situs() }}</title>
-
+  <link href="https://fonts.googleapis.com/css?family=Julius+Sans+One" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- Google Font: Source Sans Pro -->
 <!--   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
  -->  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <link rel="stylesheet" href="{{ url('plugins/fontawesome-free/css/all.min.css') }}">
   <!-- Ionicons -->
   <link rel="stylesheet" href="{{ url('plugins/ionicons-2.0.1/css/ionicons.min.css') }}">
@@ -25,7 +28,80 @@
   <link rel="stylesheet" href="{{ url('plugins/daterangepicker/daterangepicker.css') }}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{ url('plugins/summernote/summernote-bs4.min.css') }}">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="{{ url('Assets/css/style.css') }}" rel="stylesheet">
   <style type="text/css">
+    .logo-brand { padding-top: 15px; text-align: left; font-family: 'Julius Sans One', sans-serif; }
+    .p1 { font-size: 18pt; }
+    .p2 { font-size: 24pt; }
+    .material-icons {display: inline-flex; vertical-align: top;}
+    .kontak { padding-left: 6px; }
+    .icon-block { padding: 0 15px; }
+    .icon-block .material-icons { font-size: inherit; }
+    .sec-one-header { font-family: 'Julius Sans One', sans-serif;}
+    .hr-theme-slash-2 { display: flex; }
+    .hr-line { width: 80%; position: relative; margin-bottom: 45px; border-bottom: 1px solid; }
+    .hr-icon { position: relative; top: 3px; }
+    .kop-logo { margin-top: 50px; margin-bottom: 50px; }
+    .capl { margin-top: -70px;}
+    .caps { margin-top: -30px;}
+    .capm { margin-top: -40px; }
+    .main-header nav, .main-sidebar nav, .main-header {
+      height: initial !important;
+      line-height: initial !important;
+      background-color: initial;
+    }
+    .content-title{
+      width: 100%;
+    }
+    .nav-sidebar .nav-item a{
+      height: 35px !important;
+    }
+    .pagination-cw ul {
+      margin: 2em auto;
+      padding-left: 0;
+      list-style-type: none;
+    }
+
+    .pagination-cw .page-number {
+      display: inline;
+    }
+
+    .pagination-cw .page-number {
+      text-decoration: none;
+      color: black !important;
+    }
+
+    /* Pagination 2 */
+    .pagination-2 .page-number {
+      padding: 8px 16px;
+      background-color: #f3f4f2;
+    }
+
+    .pagination-2 .page-number:hover {
+      background-color: #d9dcd6;
+    }
+
+    .pagination-2 .active {
+      border-radius: 4px;
+      background-color: #4CAF50;
+    }
+
+    .pagination-2 .active:hover {
+      background-color: #4CAF50;
+    }
+
+    .pagination-2 .active a {
+      color: #f3f4f2;
+    }
+    .pp-kecil {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      object-fit: cover;
+      vertical-align: middle;
+      object-position: center right;
+    }
     a{
        color: #00a85a;
     }

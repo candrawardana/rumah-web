@@ -2,6 +2,10 @@
 @section('title')
 Santri
 @endsection
+@section('subtitle')
+<li class="breadcrumb-item"><a href="url('santri')">Santri</a></li>
+<li class="breadcrumb-item active">{{ $Santri->s_nama }}</li>
+@endsection
 @section('content')
 <!-- SANTRI_CONTENT -->
 <div class="container">

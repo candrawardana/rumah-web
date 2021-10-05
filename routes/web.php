@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'DashboardController@welcome')->name('welcome');
+Route::get('/', 'DashboardController@home');
+Route::get('home', 'DashboardController@home')->name('home');
 Route::get('policy', 'DashboardController@policy')->name('policy');
-
 
 Route::get('login', 'AuthController@showFormLogin')->name('login');
 Route::post('login', 'AuthController@login');
@@ -36,7 +36,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/santri/{id}', 'SantriController@webDetailSantri');
     Route::get('/santri/{id}/kesalahan', 'SantriController@webKesalahanSantri');
 
-    Route::get('home', 'DashboardController@home')->name('home');
     Route::get('user', 'PenggunaController@user')->name('user');
     Route::post('user/save', 'PenggunaController@save');
     Route::post('user/delete', 'PenggunaController@delete');

@@ -124,7 +124,7 @@ class SantriController extends Controller
         else{
             $Santri = Santri::whereIn("s_nis",$SantriID);
         }
-        $Santri = $Santri->paginate(50);
+        $Santri = $Santri->orderBy("s_nama","asc")->paginate(50);
         $Santri->appends(['q' => $q]);
         foreach($Santri as $s){
             $s->foto = gambar_second($s->s_foto);
@@ -158,8 +158,8 @@ class SantriController extends Controller
       if(Auth::user()->jenis=="Ustadz" || Auth::user()->jenis=="Administrator"){
         $admin = true;
       }
-      if($admin == false && (!$Santri || !$WaliOrangTua)){
-        return Redirect::back();
+      if(!$Santri || ($admin == false && !$WaliOrangTua)){
+        return redirect(url('santri'));
       }
       $Santri->foto = gambar_second($Santri->s_foto);
       $Ayah = Ayah::where("s_nis",$id)->first();
@@ -178,8 +178,8 @@ class SantriController extends Controller
       if(Auth::user()->jenis=="Ustadz" || Auth::user()->jenis=="Administrator"){
         $admin = true;
       }
-      if(!$Santri && $admin==false){
-        return Redirect::back();
+      if(!$Santri || $admin==false){
+        return redirect(url('santri'));
       }
       $Santri->foto = gambar_second($Santri->s_foto);
       $Kesalahan = Kesalahan::where("s_nis",$id)->orderBy("tanggal","desc")->get();

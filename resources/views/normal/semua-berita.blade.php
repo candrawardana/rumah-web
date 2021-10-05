@@ -2,6 +2,9 @@
 @section('title')
 Berita
 @endsection
+@section('subtitle')
+<li class="breadcrumb-item active">Berita</li>
+@endsection
 @section('content')
 <!-- FORM -->
 <div class="container">

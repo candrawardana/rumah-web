@@ -2,6 +2,9 @@
 @section('title')
 Pengumuman
 @endsection
+@section('subtitle')
+<li class="breadcrumb-item active">Pengumuman</li>
+@endsection
 @section('content')
 <div class="container">
   <div class="row">

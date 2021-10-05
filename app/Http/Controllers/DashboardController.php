@@ -10,8 +10,18 @@ use Auth;
 
 class DashboardController extends Controller
 {
-    public function welcome()
+    public function policy()
     {
+        return view('normal.policy');
+    }
+
+    public function home()
+    {
+        if(Auth::user()){
+            if(Auth::user()->jenis=="Administrator"){
+                return view('admin.home');
+            }
+        }
         $Kegiatan = Kegiatan::orderBy("kg_tanggal","desc")->limit(3)->get();
         foreach($Kegiatan as $b){
             $b->kg_foto = gambar_second("/foto/kegiatan/".explode("|",$b->kg_foto)[0]);
@@ -24,17 +34,6 @@ class DashboardController extends Controller
             array_push($Gallery,url($g)."?t=".$time);
         }
         return view('welcome',compact("Kegiatan","Gallery"));
-    }
-    public function policy()
-    {
-        return view('normal.policy');
-    }
-
-    public function home()
-    {
-        if(Auth::user()->jenis=="Administrator")
-            return view('admin.home');
-        return redirect("/");
     }
     public function gallery($file){
         if(Storage::exists("gallery/".$file)){
