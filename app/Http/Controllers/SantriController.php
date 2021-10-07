@@ -183,6 +183,65 @@ class SantriController extends Controller
       }
       $Santri->foto = gambar_second($Santri->s_foto);
       $Kesalahan = Kesalahan::where("s_nis",$id)->orderBy("tanggal","desc")->get();
-      return view("normal.kesalahan-santri",compact("Santri","Kesalahan"));
+      return view("normal.kesalahan",compact("Santri","Kesalahan"));
+    }
+    public function tambahKesalahan(Request $request){
+      if(Auth::user()->jenis=="Ustadz" || Auth::user()->jenis=="Administrator"){
+        $Kesalahan = new Kesalahan();
+        $Kesalahan->k_tanggal = $request->k_tanggal;
+        $Kesalahan->k_kesalahan = $request->k_kesalahan;
+        $Kesalahan->k_hukuman = $request->k_hukuman;
+        $Kesalahan->s_nis = $request->s_nis;
+        $time = strtotime($request->k_tanggal);
+        $Kesalahan->tanggal = date('Y-m-d',$time);
+        $Kesalahan->save();
+        return Redirect::back()->with("success","Berhasil menambahkan kesalahan");
+      }
+      return view("errors.404");
+    }
+    public function hapusKesalahan($id){
+      if(Auth::user()->jenis=="Administrator"){
+        Kesalahan::where("id",$id)->delete();
+        return Redirect::back()->with("success","Berhasil menghapus kesalahan");
+      }
+      return view("errors.404");
+    }
+    public function webHafalanBaruSantri($id,Request $request){
+      $Santri = Santri::where("s_nis",$id)->select("s_nis","s_nama","s_foto")->first();
+      $admin = false;
+      if(Auth::user()->jenis=="Ustadz" || Auth::user()->jenis=="Administrator"){
+        $admin = true;
+      }
+      if(!$Santri || $admin==false){
+        return redirect(url('santri'));
+      }
+      $Santri->foto = gambar_second($Santri->s_foto);
+      $HafalanBaru = HafalanBaru::where("s_nis",$id)->orderBy("tanggal","desc")->get();
+      return view("normal.hafalan-baru",compact("Santri","HafalanBaru"));
+    }
+    public function tambahHafalanBaru(Request $request){
+      if(Auth::user()->jenis=="Ustadz" || Auth::user()->jenis=="Administrator"){
+        $HafalanBaru = new HafalanBaru();
+        $HafalanBaru->hb_tanggal = $request->hb_tanggal;
+        $HafalanBaru->hb_juz = $request->hb_juz;
+        $HafalanBaru->hb_surat = $request->hb_surat;
+        $HafalanBaru->hb_ayat = $request->hb_ayat;
+        $HafalanBaru->hb_nilai = $request->hb_nilai;
+        $HafalanBaru->hb_ustadz = $request->hb_ustadz;
+        $HafalanBaru->hb_keterangan = $request->hb_keterangan;
+        $HafalanBaru->s_nis = $request->s_nis;
+        $time = strtotime($request->hb_tanggal);
+        $HafalanBaru->tanggal = date('Y-m-d',$time);
+        $HafalanBaru->save();
+        return Redirect::back()->with("success","Berhasil menambahkan kesalahan");
+      }
+      return view("errors.404");
+    }
+    public function hapusHafalanBaru($id){
+      if(Auth::user()->jenis=="Administrator"){
+        HafalanBaru::find($id)->delete();
+        return Redirect::back()->with("success","Berhasil menghapus kesalahan");
+      }
+      return view("errors.404");
     }
 }

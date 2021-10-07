@@ -13,6 +13,8 @@ use App\Models\HafalanBaru;
 use App\Models\Kesalahan;
 use App\Models\Tabungan;
 use App\Models\UangSyariah;
+use App\Models\Pengumuman;
+use App\Models\Kegiatan;
 
 class MigrasiDataController extends Controller
 {
@@ -115,6 +117,46 @@ class MigrasiDataController extends Controller
             if($count==0)
                 return "selesai";
             return "<a href='".url("migrasi/uang-syariah?page=".$p)."'>Lanjut ke ".$p."</a>";
+        }
+    }
+    public function pengumuman(Request $request){
+        if(Auth::user()->jenis=="Administrator"){
+            $p = 1;
+            if($request->has("page")){
+                $p=$request->page;
+            }
+            $Pengumuman = Pengumuman::orderBy("pg_id","asc")->paginate(2000);
+            $count = 0;
+            foreach($Pengumuman as $d){
+                $time = strtotime($d->pg_tanggal);
+                $d->tanggal = date('Y-m-d',$time);
+                $d->save();
+                $count++;
+            }
+            $p++;
+            if($count==0)
+                return "selesai";
+            return "<a href='".url("migrasi/pengumuman?page=".$p)."'>Lanjut ke ".$p."</a>";
+        }
+    }
+    public function kegiatan(Request $request){
+        if(Auth::user()->jenis=="Administrator"){
+            $p = 1;
+            if($request->has("page")){
+                $p=$request->page;
+            }
+            $Kegiatan = Kegiatan::orderBy("kg_id","asc")->paginate(2000);
+            $count = 0;
+            foreach($Kegiatan as $d){
+                $time = strtotime($d->kg_tanggal);
+                $d->tanggal = date('Y-m-d',$time);
+                $d->save();
+                $count++;
+            }
+            $p++;
+            if($count==0)
+                return "selesai";
+            return "<a href='".url("migrasi/kegiatan?page=".$p)."'>Lanjut ke ".$p."</a>";
         }
     }
 }

@@ -3,7 +3,7 @@
 Berita
 @endsection
 @section('subtitle')
-<li class="breadcrumb-item"><a href="url('berita')">Berita</a></li>
+<li class="breadcrumb-item"><a href="{{ url('berita') }}">Berita</a></li>
 <li class="breadcrumb-item active">{{ $Berita->title }}</li>
 @endsection
 @section('content')

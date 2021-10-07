@@ -3,7 +3,7 @@
 Kegiatan
 @endsection
 @section('subtitle')
-<li class="breadcrumb-item"><a href="url('kegiatan')">Kegiatan</a></li>
+<li class="breadcrumb-item"><a href="{{ url('kegiatan') }}">Kegiatan</a></li>
 <li class="breadcrumb-item active">{{ $Kegiatan->kg_judul }}</li>
 @endsection
 @section('content')

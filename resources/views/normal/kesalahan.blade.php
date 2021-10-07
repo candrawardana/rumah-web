@@ -2,6 +2,11 @@
 @section('title')
 Kesalahan Santri
 @endsection
+@section('subtitle')
+<li class="breadcrumb-item"><a href="{{ url('santri') }}">Santri</a></li>
+<li class="breadcrumb-item"><a href="{{ url('santri/'.$Santri->s_nis) }}">{{ $Santri->s_nama }}</a></li>
+<li class="breadcrumb-item active">Kesalahan</li>
+@endsection
 @section('content')
 <!-- SANTRI_CONTENT -->
 <div class="container">
@@ -19,7 +24,7 @@ Kesalahan Santri
           </div>
           <div class="collapsible-body">
             <!-- FORM KESALAHAN -->
-            <form action="{{ url('buat-kesalahan') }}" method="POST">
+            <form action="{{ url('tambah-kesalahan') }}" method="POST">
               @csrf
               <input type="hidden" name="s_nis" value="{{ $Santri->s_nis }}">
               <div class="input-field">

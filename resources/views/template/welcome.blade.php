@@ -1,4 +1,4 @@
-@if(Auth::user() && Auth::user()->jenis == 'Administrator')
+@if(\Auth::user() && \Auth::user()->jenis == 'Administrator')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -138,32 +138,23 @@
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
+          <span class="badge badge-warning navbar-badge"><small class="far fa-bell"></small> {{ notifikasi()->count }}</span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
+          <span class="dropdown-item dropdown-header">{{ notifikasi()->count }} Pemberitahuan</span>
+          @foreach(notifikasi()->list as $notifikasi)
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
+          <a href="{{ $notifikasi->notifikasi_related['link'] }}" class="dropdown-item">
+            <i class="{{ $notifikasi->notifikasi_related['icon'] }} mr-2"></i> {{ $notifikasi->judul }}
+            <span class="float-right text-muted text-sm">{{ $notifikasi->created_at }}</span>
           </a>
+          @endforeach
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+          <a href="{{ url('notifikasi') }}" class="dropdown-item dropdown-footer">Lihat Semua Pemberitahuan</a>
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
+        <a class="nav-link" href="{{ url('akun') }}" role="button">
           <i class="fa fa-cog"></i>
         </a>
       </li>
@@ -188,10 +179,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{ pp_check(Auth::user()->id) }}" class="img-circle elevation-2" alt="User Image">
+          <img src="{{ pp_check(\Auth::user()->id) }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+          <a href="#" class="d-block">{{ \Auth::user()->name }}</a>
         </div>
       </div>
 
@@ -213,7 +204,7 @@
               <i class="nav-icon fas fa-bell"></i>
               <p>
                 Notifikasi
-                <span class="right badge badge-danger">8</span>
+                <span class="right badge badge-danger text-white">{{ notifikasi()->count }}</span>
               </p>
             </a>
           </li>
@@ -473,6 +464,7 @@
     //$(".dropdown-trigger").dropdown();
   });
 </script>
+@yield("script")
 </body>
 </html>
 @else
@@ -576,7 +568,7 @@
     <a href="#" data-target="drawernav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     <ul id="nav-mobile" class="right hide-on-med-and-down">
       <li><a href="{{ url('/') }}"><i class="material-icons left">home</i>Dashboard</a></li>
-      @if(Auth::user())
+      @if(\Auth::user())
       <li><a href="{{ url('santri') }}"><i class="material-icons left">person</i>Data Santri</a></li>
       <li><a href="{{ url('pengumuman') }}"><i class="material-icons left">notifications</i>Pengumuman</a></li>
       @endif

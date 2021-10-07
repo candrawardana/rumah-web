@@ -54,6 +54,7 @@
     </div>
     <br><br><br>
   </div>
+
 </div>
   <div class="section-one container">
     <div class="hr-theme-slash-2">
@@ -84,6 +85,38 @@
         </div>
     @endforeach
 </div>
+
+</div>
+  <div class="section-one container">
+    <div class="hr-theme-slash-2">
+  <div class="hr-line"></div>
+  <h4 class="header center green-text sec-one-header" style="margin-top: 30px;">
+    Berita
+  </h4>
+  <div class="hr-line"></div>
+</div>
+
+<!-- Berita -->
+
+<div class="row">
+    @foreach($Berita as $k)
+        <div class="col s12 m4">
+            <div class="card" data-aos="fade-up" data-aos-anchor-placement="top-bottom" data-aos-duration="2000">
+                <div class="card-image waves-effect waves-block waves-light"  style="height:200px">
+                    <a href="{{ url('berita/'.$k->id) }}"><img class="img-kegiatan" src="{{ $k->thumbnail }}"></a>
+                </div>
+                <div class="card-content" style="height:150px">
+                    <span class="card-title"><a href="{{ url('berita/'.$k->id) }}">{{ $k->title }}</a></span>
+                    <p class="truncate">{{ $k->content }}</p>
+                </div>
+                <div class="card-action"  style="height:55px">
+                    <small><i>{{ $k->tempat }}, {{ $k->tanggal }}</i></small>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+
   </div>
   <div class="section-two">
     <div class="parallax-container">
@@ -98,10 +131,10 @@
           <div class="icon-block">
             <div data-aos="zoom-in" data-aos-duration="2000">
             <h2 class="center green-text"><i class="material-icons">local_library</i></h2>
-            <h5 class="center">Visi Darul Adib</h5>
+            <h5 class="center">Visi {{ penempatan("NAMA_YAYASAN") }}</h5>
             </div>
             <div data-aos="fade-left" data-aos-duration="2000">
-            <p class="light center">Terwujudnya generasi Qur'ani yang unggul dalam prestasi serta berakhlakul karimah dan bisa mengamalkan nilai-nilai Alqur'an.</p>
+            <p class="light center">{{ penempatan("VISI_YAYASAN") }}</p>
             </div>
           </div>
         </div>
@@ -110,10 +143,10 @@
           <div class="icon-block">
             <div data-aos="zoom-in" data-aos-duration="2000">
             <h2 class="center green-text"><i class="material-icons">flag</i></h2>
-            <h5 class="center">Misi Darul Adib</h5>
+            <h5 class="center">Misi {{ penempatan("NAMA_YAYASAN") }}</h5>
             </div>
             <div data-aos="fade-right" data-aos-duration="2000">
-            <p class="light center">Mengajarkan Al Qur'an sesuai tahapannya, menanamkan akhlakul karimah sesuai Al Qur'an dan Sunnah, mendidik dan mengajarkan ilmu pengetahuan secara komprehensif, serta mengembangkan potensi santri melalui program ekstrakurikuler.</p>
+            <p class="light center">{{ penempatan("MISI_YAYASAN") }}</p>
             </div>
           </div>
         </div>

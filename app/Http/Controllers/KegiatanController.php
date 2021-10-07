@@ -9,7 +9,7 @@ class KegiatanController extends Controller
 {
     public function apiKegiatan(Request $request){
       $q=null;
-      $Kegiatan = Kegiatan::orderBy("kg_tanggal","desc");
+      $Kegiatan = Kegiatan::orderBy("tanggal","desc");
       if($request->has('q')){
         if($request->q!="" && $request->q!=null){
           $q=$request->q;
@@ -38,7 +38,7 @@ class KegiatanController extends Controller
     }
     public function webKegiatan(Request $request){
       $q=null;
-      $Kegiatan = Kegiatan::orderBy("kg_tanggal","desc");
+      $Kegiatan = Kegiatan::orderBy("tanggal","desc");
       if($request->has('q')){
         if($request->q!="" && $request->q!=null){
           $q=$request->q;

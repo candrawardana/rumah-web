@@ -6,12 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuids;
 
-class Pengumuman extends Model
+class Notifikasi extends Model
 {
     use HasFactory,Uuids;
-    protected $primaryKey = 'pg_id';
-    protected $connection = 'mysql2';
-    protected $table = 'pengumuman';
+    protected $table = 'notifikasi';
     public $incrementing = false;
-    public $timestamps = false;
 }

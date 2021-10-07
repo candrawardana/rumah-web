@@ -1,6 +1,7 @@
 <?php
 use App\Models\User;
 use App\Models\Nodin;
+use App\Models\Notifikasi;
 
 if(!function_exists('judul_situs')){
     function judul_situs($singkat = 0){
@@ -152,6 +153,54 @@ if (!function_exists('nomor')){
             ',', // character to use as decimal point
             '.' // character to use as thousands separator
         );
+    }
+}
+
+if (!function_exists('notifikasi')){
+    function notifikasi(){
+        $Notifikasi=new stdClass();
+        $list=Notifikasi::where("user_id",Auth::id())->where("dilihat",0)->orderBy("created_at","desc")->limit(5)->get();
+        foreach($list as $l){
+            $l->notifikasi_related=notifikasi_related($l);
+        }
+        $Notifikasi->list=$list;
+        $Notifikasi->count=Notifikasi::where("user_id",Auth::id())->where("dilihat",0)->orderBy("created_at","desc")->count();
+        return $Notifikasi;
+    }
+}
+
+if (!function_exists('semua_ustadz')){
+    function semua_ustadz(){
+        $User = User::where("jenis","Ustadz")->orderBy("name","desc")->select("id","name")->get();
+        return $User;
+    }
+}
+
+if (!function_exists('notifikasi_related')){
+    function notifikasi_related(Notifikasi $Notifikasi){
+        $icon = "fas fa-envelope";
+        $link = url($Notifikasi->jenis."/".$Notifikasi->related_id);
+        if($Notifikasi->jenis=="url"){
+            $icon = "fas fa-external-link";
+            $link = $Notifikasi->related_id;
+        }
+        if($Notifikasi->jenis=="santri"){
+            $icon = "fas fa-user";
+        }
+        if($Notifikasi->jenis=="pengumuman"){
+            $icon = "fas fa-clock";
+        }
+        if($Notifikasi->jenis=="kegiatan"){
+            $icon = "fas fa-leaf";
+        }
+        if($Notifikasi->jenis=="berita"){
+            $icon = "fas fa-globe";
+        }
+        if($Notifikasi->jenis=="tabungan"){
+            $icon = "fas fa-cut";
+        }
+
+        return compact("icon","link");
     }
 }
 ?>

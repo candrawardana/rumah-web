@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 use App\Models\Kegiatan;
+use App\Models\Berita;
 use Storage;
 use Auth;
+use Redirect;
 
 class DashboardController extends Controller
 {
@@ -17,9 +19,10 @@ class DashboardController extends Controller
 
     public function home()
     {
+        $view = "welcome";
         if(Auth::user()){
             if(Auth::user()->jenis=="Administrator"){
-                return view('admin.home');
+                $view = 'admin.home';
             }
         }
         $Kegiatan = Kegiatan::orderBy("kg_tanggal","desc")->limit(3)->get();
@@ -27,13 +30,22 @@ class DashboardController extends Controller
             $b->kg_foto = gambar_second("/foto/kegiatan/".explode("|",$b->kg_foto)[0]);
             $b->kg_desc = substr($b->kg_desc, 0,150)."...lihat selengkapnya";
         }
-        $Galleryx=Storage::allFiles("gallery/");
+        $Berita = Berita::orderBy("tanggal","desc")->limit(3)->get();
+        foreach($Berita as $b){
+            $b->pembuat = detail_pembuat($b->user_id);
+            $b->thumbnail = gambar_thumbnail("berita",$b->id,$b->thumbnail);
+            $b->content = substr($b->content, 0,150)."...lihat selengkapnya";
+          }
+        $Galleryx=collect(Storage::allFiles("gallery/"))
+        ->sortBy(function ($file) {
+            return Storage::lastModified($file);
+        });
         $Gallery=[];
         foreach($Galleryx as $g){
             $time = Storage::lastModified($g);
             array_push($Gallery,url($g)."?t=".$time);
         }
-        return view('welcome',compact("Kegiatan","Gallery"));
+        return view($view,compact("Kegiatan","Gallery","Berita"));
     }
     public function gallery($file){
         if(Storage::exists("gallery/".$file)){
@@ -42,5 +54,33 @@ class DashboardController extends Controller
             return Storage::get("gallery/".$file);
         }
         else return "Gagal membuka file, kemungkinan file tidak ada atau error";
+    }
+    public function galleryHapus($nomor){
+        if(Auth::user()->jenis!="Administrator"){
+            return Redirect::back();
+        }
+        $Galleryx=collect(Storage::allFiles("gallery/"))
+        ->sortBy(function ($file) {
+            return Storage::lastModified($file);
+        });
+        $Gallery=[];
+        foreach($Galleryx as $g){
+            array_push($Gallery,$g);
+        }
+        Storage::delete($Gallery[$nomor]);
+        return Redirect::back();
+    }
+    public function galleryTambah(Request $request){
+        if($request->hasFile('file')){
+            if(Storage::exists("gallery/".$request->file('file')->getClientOriginalName()."/")){
+                Storage::delete("gallery/".$request->file('file')->getClientOriginalName()."/");
+            }
+            $path = Storage::putFileAs(
+                "gallery/",
+                $request->file('file'),
+                $request->file('file')->getClientOriginalName()
+            );
+        }
+        return Redirect::back()->with('success', 'Berhasil mengupload foto!');
     }
 }

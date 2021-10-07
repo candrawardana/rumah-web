@@ -30,11 +30,22 @@ Route::get('/berita/{id}', 'BeritaController@webDetailBerita');
 Route::get('/gallery/{file}', 'DashboardController@gallery');
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/hapus-gallery/{nomor}', 'DashboardController@galleryHapus');
+    Route::post('/tambah-gallery', 'DashboardController@galleryTambah');
 
-    Route::get('/pengumuman', 'PengumumanController@webPengumuman');
+    Route::get('/pengumuman/{id?}', 'PengumumanController@webPengumuman');
+    Route::post('/tambah-pengumuman', 'PengumumanController@tambahPengumuman');
+    Route::get('/hapus-pengumuman/{id}', 'PengumumanController@hapusPengumuman');
+
+
     Route::get('/santri', 'SantriController@webSantri');
     Route::get('/santri/{id}', 'SantriController@webDetailSantri');
     Route::get('/santri/{id}/kesalahan', 'SantriController@webKesalahanSantri');
+    Route::post('/tambah-kesalahan', 'SantriController@tambahKesalahan');
+    Route::get('/hapus-kesalahan/{id}', 'SantriController@hapusKesalahan');
+    Route::get('/santri/{id}/hafalan-baru', 'SantriController@webHafalanBaruSantri');
+    Route::post('/tambah-hafalan-baru', 'SantriController@tambahHafalanBaru');
+    Route::get('/hapus-hafalan-baru/{id}', 'SantriController@hapusHafalanBaru');
 
     Route::get('user', 'PenggunaController@user')->name('user');
     Route::post('user/save', 'PenggunaController@save');
@@ -55,5 +66,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('migrasi/hafalan-baru', 'MigrasiDataController@hafalanBaru');
     Route::get('migrasi/kesalahan', 'MigrasiDataController@kesalahan');
     Route::get('migrasi/uang-syariah', 'MigrasiDataController@uangSyariah');
+    Route::get('migrasi/pengumuman', 'MigrasiDataController@pengumuman');
+    Route::get('migrasi/kegiatan', 'MigrasiDataController@kegiatan');
 
 });
