@@ -20,7 +20,7 @@
 					<td>{{ $h->u_keterangan }}</td>
 					@if(Auth::user()->jenis == 'Administrator')
 					<td><a class="tooltipped red-text" data-position="bottom" data-tooltip="Hapus Data Bulan {{ $h->u_bulan }}" onClick="javascript: return confirm('Yakin ingin menghapus?');" 
-						href="{{ url('hapus-uang-syariah/'.$h->h_id) }}"><i class="material-icons">delete</i></a></td>
+						href="{{ url('hapus-uang-syariah/'.$h->id) }}"><i class="material-icons">delete</i></a></td>
 					@endif
 				</tr>
 			@endforeach

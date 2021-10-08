@@ -46,6 +46,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/santri/{id}/hafalan-baru', 'SantriController@webHafalanBaruSantri');
     Route::post('/tambah-hafalan-baru', 'SantriController@tambahHafalanBaru');
     Route::get('/hapus-hafalan-baru/{id}', 'SantriController@hapusHafalanBaru');
+    Route::get('/santri/{id}/hafalan', 'SantriController@webHafalanSantri');
+    Route::post('/tambah-hafalan', 'SantriController@tambahHafalan');
+    Route::get('/hapus-hafalan/{id}', 'SantriController@hapusHafalan');
+    Route::get('/santri/{id}/tabungan', 'SantriController@webTabunganSantri');
+    Route::post('/tambah-tabungan', 'SantriController@tambahTabungan');
+    Route::get('/hapus-tabungan/{id}', 'SantriController@hapusTabungan');
+    Route::post('/hapus-tabungan/{id}', 'SantriController@hapusTabunganProses');
+    Route::get('/santri/{id}/uang-syariah', 'SantriController@webUangSyariahSantri');
+    Route::post('/tambah-uang-syariah', 'SantriController@tambahUangSyariah');
+    Route::get('/hapus-uang-syariah/{id}', 'SantriController@hapusUangSyariah');
 
     Route::get('user', 'PenggunaController@user')->name('user');
     Route::post('user/save', 'PenggunaController@save');

@@ -11,6 +11,8 @@
   <!-- Google Font: Source Sans Pro -->
 <!--   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
  -->  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ url('alertify/alertify.js') }}">
+  <link rel="stylesheet" href="{{ url('toastr/toastr.min.css') }}">
   <link rel="stylesheet" href="{{ url('plugins/fontawesome-free/css/all.min.css') }}">
   <!-- Ionicons -->
   <link rel="stylesheet" href="{{ url('plugins/ionicons-2.0.1/css/ionicons.min.css') }}">
@@ -359,6 +361,12 @@
           <div class="col s12 m6">
             <ol class="breadcrumb float-sm-right">
               @yield('subtitle')
+              @if (\Session::has('success'))
+              <li class="breadcrumb-item text-green">{!! \Session::get('success') !!}</li>
+              @endif
+              @if (\Session::has('error'))
+              <li class="breadcrumb-item text-red">{!! \Session::get('error') !!}</li>
+              @endif
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -423,6 +431,8 @@
 <script src="{{ url('AdminLTE/js/adminlte.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{ url('AdminLTE/js/demo.js') }}"></script>
+<script src="{{ url('alertify/alertify.js') }}"></script>
+<script src="{{ url('toastr/toastr.min.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script type="text/javascript">
@@ -464,6 +474,16 @@
     //$(".dropdown-trigger").dropdown();
   });
 </script>
+    @if (\Session::has('success'))
+        <script>
+          toastr.success("{!! \Session::get('success') !!}");
+        </script>
+    @endif
+    @if (\Session::has('error'))
+        <script>
+          toastr.error("{!! \Session::get('error') !!}");
+        </script>
+    @endif
 @yield("script")
 </body>
 </html>
@@ -472,6 +492,8 @@
 <html>
 <head>
   <link rel="icon" href="{{ url('Assets/images/icon.png') }}?d=2" type="image/png">
+  <link rel="stylesheet" href="{{ url('alertify/alertify.css') }}">
+  <link rel="stylesheet" href="{{ url('toastr/toastr.min.css') }}">
 <link href="https://fonts.googleapis.com/css?family=Julius+Sans+One" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
@@ -574,7 +596,11 @@
       @endif
       <li><a href="{{ url('berita') }}"><i class="material-icons left">public</i>Berita</a></li>
       <li><a href="{{ url('kegiatan') }}"><i class="material-icons left">group</i>Kegiatan</a></li>
+      @if(\Auth::user())
+      <li><a href="{{ url('logout') }}"><i class="material-icons left">close</i>Logout</a></li>
+      @else
       <li><a href="{{ url('login') }}"><i class="material-icons left">lock</i>Login</a></li>
+      @endif
     </ul>
   </div>
 </nav>
@@ -612,6 +638,8 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="{{ url('alertify/alertify.js') }}"></script>
+<script src="{{ url('toastr/toastr.min.js') }}"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
@@ -652,6 +680,16 @@
     //$(".dropdown-trigger").dropdown();
   });
 </script>
+    @if (\Session::has('success'))
+        <script>
+          toastr.success("{!! \Session::get('success') !!}");
+        </script>
+    @endif
+    @if (\Session::has('error'))
+        <script>
+          toastr.error("{!! \Session::get('error') !!}");
+        </script>
+    @endif
 @yield("script")
 </body>
 </html>
