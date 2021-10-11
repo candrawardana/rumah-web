@@ -1,5 +1,7 @@
 <?php
 use App\Models\User;
+use App\Models\Ayah;
+use App\Models\Ibu;
 use App\Models\Nodin;
 use App\Models\Notifikasi;
 
@@ -135,7 +137,8 @@ if (!function_exists('gambar_thumbnail')){
 
 if (!function_exists('gambar_second')){
     function gambar_second($link){
-        return ENV("APP_URL_SECOND","http://localhost").str_replace(" ","%20",$link);
+        return url($link);
+        // return ENV("APP_URL_SECOND","http://localhost").str_replace(" ","%20",$link);
     }
 }
 
@@ -201,6 +204,53 @@ if (!function_exists('notifikasi_related')){
         }
 
         return compact("icon","link");
+    }
+}
+
+if (!function_exists('ayah_santri')){
+    function ayah_santri($id){
+        $Ayah=new stdClass();
+        $User = User::join("wali_orang_tua as w","users.id","w.user_id")
+            ->where("w.nis_santri",$id)
+            ->where("users.jenis","ayah_santri")
+            ->select("users.*")->first();
+        if(!$User)
+                return Ayah::where("s_nis",$id)->first();
+        $lahir = explode(", ",$User->lahir);
+        $Ayah->a_id = $User->label_id;
+        $Ayah->s_nis = $id;
+        $Ayah->a_nama = $User->name;
+        $Ayah->a_tmplahir = $lahir[0];
+        $Ayah->a_tgllahir = end($lahir);
+        $Ayah->a_pendidikan = $User->pendidikan;
+        $Ayah->a_pekerjaan = $User->pekerjaan;
+        $Ayah->a_alamat = $User->alamat;
+        $Ayah->a_telp = $User->hp;
+        $Ayah->a_wa = $User->wa;
+        return $Ayah;
+    }
+}
+
+if (!function_exists('ibu_santri')){
+    function ibu_santri($id){
+        $Ibu=new stdClass();
+        $User = User::join("wali_orang_tua as w","users.id","w.user_id")
+            ->where("w.nis_santri",$id)
+            ->where("users.jenis","ibu_santri")
+            ->select("users.*")->first();
+        if(!$User)
+                return Ibu::where("s_nis",$id)->first();
+        $lahir = explode(", ",$User->lahir);
+        $Ibu->i_id = $User->label_id;
+        $Ibu->s_nis = $id;
+        $Ibu->i_nama = $User->name;
+        $Ibu->i_tmplahir = $lahir[0];
+        $Ibu->i_tgllahir = end($lahir);
+        $Ibu->i_pendidikan = $User->pendidikan;
+        $Ibu->i_pekerjaan = $User->pekerjaan;
+        $Ibu->i_telp = $User->hp;
+        $Ibu->i_wa = $User->wa;
+        return $Ibu;
     }
 }
 ?>

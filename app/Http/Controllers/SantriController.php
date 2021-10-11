@@ -15,9 +15,12 @@ use App\Models\Kesalahan;
 use App\Models\Tabungan;
 use App\Models\UangSyariah;
 use App\Models\Dana;
+use App\Models\User;
 use Session;
 use Redirect;
-
+use Storage;
+use Hash;
+use DB;
 class SantriController extends Controller
 {
     public function apiSantri(Request $request){
@@ -47,8 +50,8 @@ class SantriController extends Controller
         return response()->json(['result' => 'error', 'title' => 'Santri tidak ditemukan']);
       }
       $Santri->foto = gambar_second($Santri->s_foto);
-      $Ayah = Ayah::where("s_nis",$id)->first();
-      $Ibu = Ibu::where("s_nis",$id)->first();
+      $Ayah = ayah_santri($id);
+      $Ibu = ibu_santri($id);
       $Hafalan = Hafalan::where("s_nis",$id)->orderBy("tanggal","desc")->get();
       $HafalanBaru = HafalanBaru::where("s_nis",$id)->orderBy("tanggal","desc")->get();
       $Kesalahan = Kesalahan::where("s_nis",$id)->orderBy("tanggal","desc")->get();
@@ -114,6 +117,8 @@ class SantriController extends Controller
                 array_push($SantriID,$s->s_nis);
         }
         $Santri = Santri::select("s_nis","s_nama","s_foto");
+        if(Auth::user()->jenis=="Administrator")
+          $Santri = DB::table("santri")->select("s_nis","s_password","s_nama","s_foto");
         if(Auth::user()->jenis=="Ustadz" || Auth::user()->jenis=="Administrator"){
             if($request->has('q')){
                 if($request->q!="" && $request->q!=null){
@@ -129,7 +134,7 @@ class SantriController extends Controller
         $Santri->appends(['q' => $q]);
         foreach($Santri as $s){
             $s->foto = gambar_second($s->s_foto);
-            $Ayah=Ayah::where("s_nis",$s->s_nis)->first();
+            $Ayah = ayah_santri($s->s_nis);
             $s->ayah = "-";
             if($Ayah)
                 $s->ayah=$Ayah->a_nama;
@@ -151,7 +156,7 @@ class SantriController extends Controller
         return view("normal.semua-santri",compact("Santri","q"));
     }
     public function webDetailSantri($id,Request $request){
-      $Santri = Santri::where("s_nis",$id)->first();
+      $Santri = DB::table("santri")->where("s_nis",$id)->first();
       $WaliOrangTua = WaliOrangTua::where("nis_santri",$id)
             ->where("user_id",Auth::id())
             ->first();
@@ -163,8 +168,8 @@ class SantriController extends Controller
         return redirect(url('santri'));
       }
       $Santri->foto = gambar_second($Santri->s_foto);
-      $Ayah = Ayah::where("s_nis",$id)->first();
-      $Ibu = Ibu::where("s_nis",$id)->first();
+      $Ayah = ayah_santri($id);
+      $Ibu = ibu_santri($id);
       $Hafalan = Hafalan::where("s_nis",$id)->orderBy("tanggal","desc")->get();
       $HafalanBaru = HafalanBaru::where("s_nis",$id)->orderBy("tanggal","desc")->get();
       $Kesalahan = Kesalahan::where("s_nis",$id)->orderBy("tanggal","desc")->get();
@@ -172,6 +177,170 @@ class SantriController extends Controller
       $UangSyariah = UangSyariah::where("s_nis",$id)->orderBy("tanggal","desc")->get();
 
         return view("normal.santri",compact("Santri","Hafalan","HafalanBaru","Kesalahan","Tabungan","UangSyariah","Ayah","Ibu"));
+    }
+
+    public function editSantri($id){
+      if(Auth::user()->jenis=="Administrator"){
+        $Santri = Santri::where("s_nis",$id)->first();
+        $WaliOrangTua = WaliOrangTua::where("nis_santri",$id)
+              ->where("user_id",Auth::id())
+              ->first();
+        $admin = false;
+        if(Auth::user()->jenis=="Ustadz" || Auth::user()->jenis=="Administrator"){
+          $admin = true;
+        }
+        if(!$Santri || ($admin == false && !$WaliOrangTua)){
+          return redirect(url('santri'));
+        }
+        $Santri->foto = gambar_second($Santri->s_foto);
+        $Ayah = ayah_santri($id);
+        $Ibu = ibu_santri($id);
+        return view("normal.edit-santri",compact("Santri","Ayah","Ibu"));
+      }
+      return view("errors.404");
+    }
+    public function tambahSantri(){
+      if(Auth::user()->jenis=="Administrator"){
+        return view("normal.tambah-santri");
+      }
+      return view("errors.404");
+    }
+
+    public function tambahSantriProses(Request $request){
+      if(Auth::user()->jenis!="Administrator"){
+        return view("errors.404");
+      }
+      $ubah = false;
+      if($request->has("ubah")){
+        $ubah=true;
+      }
+      $Santri = Santri::find($request->s_nis);
+      if(!$Santri && $ubah==true)
+        return view("errors.404");
+      if($Santri && $ubah==false)
+        return view("errors.404");
+      if(!$Santri)
+        $Santri = new Santri();
+      $Santri->s_nis=$request->s_nis;
+      $Santri->s_password=$request->s_password; 
+      $Santri->s_reg=$request->s_reg; 
+      $Santri->s_nama=$request->s_nama; 
+      $Santri->s_panggilan=$request->s_panggilan; 
+      $Santri->s_tmplahir=$request->s_tmplahir;
+      $Santri->s_tgllahir=$request->s_tgllahir; 
+      $Santri->s_alamat=$request->s_alamat; 
+      $Santri->s_anakke=$request->s_anakke; 
+      $Santri->s_jlhsaudara=$request->s_jlhsaudara;
+      $Santri->s_aslskolah=$request->s_aslskolah;
+      $Santri->s_prestasi=$request->s_prestasi;
+      $Santri->s_hobi=$request->s_hobi;
+      $Santri->s_cita=$request->s_cita;
+      $s_foto=null;
+      if($request->hasFile('s_foto')){
+        $s_foto = $request->s_nis.".".strtolower(substr(strrchr($request->file('s_foto')->getClientOriginalName(), '.'), 1));
+        if(Storage::exists("foto/".$s_foto)){
+                Storage::delete("foto/".$s_foto);
+            }
+        Storage::putFileAs(
+                "foto/",
+                $request->file('s_foto'),
+                $s_foto
+            );
+        $s_foto = "foto/".$s_foto;
+      }
+      $Santri->s_foto=$s_foto;
+      $Santri->save();
+      if(!$Santri)
+        return view("errors.404");
+      $password = Hash::make($request->s_password);
+      $a_id = "A" . $request->s_nis;
+      $i_id = "I" . $request->s_nis;
+      $Ayah = User::where("hp",$request->a_telp)->orWhere("label_id",$a_id)->first();
+      if(!$Ayah)
+        $Ayah = new User();
+      $Ayah->name = $request->a_nama;
+      $Ayah->username = $a_id;
+      $Ayah->label_id = $a_id;
+      $Ayah->password = $password;
+      $Ayah->jenis = "ayah_santri";
+      $Ayah->pekerjaan = $request->a_pekerjaan;
+      $Ayah->pendidikan = $request->a_pendidikan;
+      $Ayah->hp = $request->a_telp;
+      $Ayah->wa = $request->a_wa;
+      $Ayah->alamat = $request->a_alamat;
+      $Ayah->lahir = $request->a_tmplahir.", ".$request->a_tgllahir;
+      $Ayah->save();
+      $Ibu = User::where("hp",$request->i_telp)->orWhere("label_id",$i_id)->first();
+      if(!$Ibu)
+        $Ibu = new User();
+      $Ibu->name = $request->i_nama;
+      $Ibu->username = $i_id;
+      $Ibu->label_id = $i_id;
+      $Ibu->password = $password;
+      $Ibu->jenis = "ibu_santri";
+      $Ibu->pekerjaan = $request->i_pekerjaan;
+      $Ibu->pendidikan = $request->i_pendidikan;
+      $Ibu->hp = $request->i_telp;
+      $Ibu->wa = $request->i_wa;
+      $Ibu->alamat = $request->s_alamat;
+      $Ibu->lahir = $request->i_tmplahir.", ".$request->i_tgllahir;
+      $Ibu->save();
+      if($Ayah){
+        $WaliOrangTua = WaliOrangTua::where("nis_santri",$request->s_nis)
+            ->where("user_id",$Ayah->id)
+            ->first();
+        if(!$WaliOrangTua){
+            $WaliOrangTua = new WaliOrangTua();
+            $WaliOrangTua->nis_santri = $request->s_nis;
+            $WaliOrangTua->user_id = $Ayah->id;
+            $WaliOrangTua->save();
+        }        
+      }
+      if($Ibu){
+        $WaliOrangTua = WaliOrangTua::where("nis_santri",$request->s_nis)
+            ->where("user_id",$Ibu->id)
+            ->first();
+        if(!$WaliOrangTua){
+            $WaliOrangTua = new WaliOrangTua();
+            $WaliOrangTua->nis_santri = $request->s_nis;
+            $WaliOrangTua->user_id = $Ibu->id;
+            $WaliOrangTua->save();
+        }        
+      }
+      if($ubah==false)
+        return redirect(url('santri'))->with("success","Berhasil menambahkan santri");
+      else
+        return Redirect::back()->with("success","Berhasil mengubah santri");
+    }
+    public function hapusSantri($id){
+      if(Auth::user()->jenis=="Administrator"){
+        return view("errors.konfirmasi");
+      }
+      return view("errors.404");
+    }
+    public function hapusSantriProses(Request $request,$id){
+      if(penempatan("PASSWORD_ROOT")==$request->password && Auth::user()->jenis=="Administrator"){
+        $Santri = Santri::find($id);
+        if(Storage::exists("foto/".$Santri->s_foto)){
+                Storage::delete("foto/".$Santri->s_foto);
+            }
+        $Santri->delete();
+        $WaliOrangTua = WaliOrangTua::where("nis_santri",$id)->get();
+
+        foreach($WaliOrangTua as $w){
+          User::where("id",$w->user_id)->delete();
+        }
+        WaliOrangTua::where("nis_santri",$id)->delete();
+        Kesalahan::where("s_nis",$id)->delete();
+        HafalanBaru::where("s_nis",$id)->delete();
+        Hafalan::where("s_nis",$id)->delete();
+        Tabungan::where("s_nis",$id)->delete();
+        UangSyariah::where("s_nis",$id)->delete();
+        Dana::where("related_id",$id)->delete();
+        return Redirect::to('santri')->with("success","Berhasil menghapus Santri");
+      }
+      Session::flash('error', 'Pilih dahulu apakah anda ayah atau ibu santri tersebut');
+      return Redirect::back()->with("error","Salah Password");
     }
     public function webKesalahanSantri($id,Request $request){
       $Santri = Santri::where("s_nis",$id)->select("s_nis","s_nama","s_foto")->first();
@@ -401,5 +570,21 @@ class SantriController extends Controller
         return Redirect::back()->with("success","Berhasil menghapus kesalahan");
       }
       return view("errors.404");
+    }
+    public function webWaliSantri($id){
+      if(Auth::user()->jenis=="Administrator"){
+        $ayah_santri = ayah_santri($id);
+        $ibu_santri = ibu_santri($id);
+        return compact("ayah_santri","ibu_santri");
+      }
+     return view("errors.404");
+    }
+    public function foto($file){
+        if(Storage::exists("foto/".$file)){
+            if(request()->has('download'))
+                return Storage::download("foto/".$file);
+            return Storage::get("foto/".$file);
+        }
+        else return "Gagal membuka file, kemungkinan file tidak ada atau error";
     }
 }

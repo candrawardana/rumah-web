@@ -28,6 +28,7 @@ Route::get('/berita', 'BeritaController@webBerita');
 Route::get('/berita/{id}', 'BeritaController@webDetailBerita');
 
 Route::get('/gallery/{file}', 'DashboardController@gallery');
+Route::get('/foto/{file}', 'SantriController@foto');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/hapus-gallery/{nomor}', 'DashboardController@galleryHapus');
@@ -41,6 +42,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/santri', 'SantriController@webSantri');
     Route::get('/santri/{id}', 'SantriController@webDetailSantri');
     Route::get('/santri/{id}/kesalahan', 'SantriController@webKesalahanSantri');
+    Route::get('/tambah-santri', 'SantriController@tambahSantri');
+    Route::post('/tambah-santri', 'SantriController@tambahSantriProses');
+    Route::get('/santri/{id}/hapus', 'SantriController@hapusSantri');
+    Route::post('/santri/{id}/hapus', 'SantriController@hapusSantriProses');
     Route::post('/tambah-kesalahan', 'SantriController@tambahKesalahan');
     Route::get('/hapus-kesalahan/{id}', 'SantriController@hapusKesalahan');
     Route::get('/santri/{id}/hafalan-baru', 'SantriController@webHafalanBaruSantri');
@@ -56,6 +61,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/santri/{id}/uang-syariah', 'SantriController@webUangSyariahSantri');
     Route::post('/tambah-uang-syariah', 'SantriController@tambahUangSyariah');
     Route::get('/hapus-uang-syariah/{id}', 'SantriController@hapusUangSyariah');
+    Route::get('/santri/{id}/wali', 'SantriController@webWaliSantri');
+    Route::get('/santri/{id}/edit', 'SantriController@editSantri');
 
     Route::get('user', 'PenggunaController@user')->name('user');
     Route::post('user/save', 'PenggunaController@save');

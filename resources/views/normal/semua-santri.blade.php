@@ -35,6 +35,9 @@ Santri
         <tr>
           <th>No. Induk</th>
           <th>Nama Santri</th>
+          @if(Auth::user()->jenis == 'Administrator')
+          <th>Password</th>
+          @endif
           <th>Nama Ayah</th>
           <th>Tabungan</th>
           <th>Pilihan</th>
@@ -45,6 +48,12 @@ Santri
         <tr>
           <td>{{ $s->s_nis }}</td>
           <td>{{ $s->s_nama }}</td>
+          @if(Auth::user()->jenis == 'Administrator')
+          <td width="15%">
+            <a href="#" class="showPassword"><i class="material-icons ic">visibility</i></a>
+            <span class="tampil" style="display: none;">{{ $s->s_password }}</span>
+          </td>
+          @endif
           <td>{{ $s->ayah }}</td>
           <td><span class="left">Rp. </span><span class="right" style="padding-right: 20px">{{ nomor($s->tabungan) }}</span></td>
           <td>
@@ -80,4 +89,19 @@ Santri
 
   </div>
 </div>
+@endsection
+@section("script")
+<script type="text/javascript">
+  $(function(){
+    $('.showPassword').click(function(e){
+      e.preventDefault();
+      $(this).closest('td').find(".tampil").toggle();
+      if ($(this).closest('td').find(".ic").text() == "visibility") {
+        $(this).closest('td').find(".ic").text("visibility_off");
+      } else {
+        $(this).closest('td').find(".ic").text("visibility");
+      }
+    });
+  });
+</script>
 @endsection

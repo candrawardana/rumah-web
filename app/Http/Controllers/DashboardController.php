@@ -72,8 +72,8 @@ class DashboardController extends Controller
     }
     public function galleryTambah(Request $request){
         if($request->hasFile('file')){
-            if(Storage::exists("gallery/".$request->file('file')->getClientOriginalName()."/")){
-                Storage::delete("gallery/".$request->file('file')->getClientOriginalName()."/");
+            if(Storage::exists("gallery/".$request->file('file')->getClientOriginalName())){
+                Storage::delete("gallery/".$request->file('file')->getClientOriginalName());
             }
             $path = Storage::putFileAs(
                 "gallery/",
