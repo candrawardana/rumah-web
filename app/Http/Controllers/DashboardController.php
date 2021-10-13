@@ -25,6 +25,10 @@ class DashboardController extends Controller
                 $view = 'admin.home';
             }
         }
+        $Dana = 0;
+        $Santri = 0;
+        $Donator = 0;
+        $Koperasi = 0;
         $Kegiatan = Kegiatan::orderBy("kg_tanggal","desc")->limit(3)->get();
         foreach($Kegiatan as $b){
             $b->kg_foto = gambar_second("/foto/kegiatan/".explode("|",$b->kg_foto)[0]);
@@ -45,7 +49,7 @@ class DashboardController extends Controller
             $time = Storage::lastModified($g);
             array_push($Gallery,url($g)."?t=".$time);
         }
-        return view($view,compact("Kegiatan","Gallery","Berita"));
+        return view($view,compact("Kegiatan","Gallery","Berita","Dana","Santri","Donator","Koperasi"));
     }
     public function gallery($file){
         if(Storage::exists("gallery/".$file)){

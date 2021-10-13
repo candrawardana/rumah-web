@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Berita;
+use Storage;
+use Auth;
 class BeritaController extends Controller
 {
     //
@@ -60,5 +62,48 @@ class BeritaController extends Controller
       $berita->thumbnail = gambar_thumbnail("berita",$berita->id,$berita->thumbnail);
       $Berita = $berita;
       return view("normal.berita",compact("Berita"));
+    }
+    public function tambahBerita(Request $request){
+      $Berita = new Berita();
+      $Berita->title= $request->title;
+      $Berita->tempat = $request->tempat;
+      $Berita->content = $request->content;
+      $Berita->user_id = Auth::user()->id;
+      $Berita->thumbnail = "";
+      $time = strtotime($request->tanggal);
+      $Berita->tanggal = date('Y-m-d',$time);
+      $Berita->save();
+      if(!$Berita)
+        return redirect()->back()->with("error","Gagal");
+      if($request->hasfile('thumbnail'))
+         {
+            $request->file('thumbnail');
+            Storage::putFileAs(
+              "berita/".$Berita->id,
+              $request->file('thumbnail'),
+              $request->file('thumbnail')->getClientOriginalName()
+            );
+            $Berita->thumbnail = $request->file('thumbnail')->getClientOriginalName();
+            $Berita->save();
+        }
+      return redirect()->back()->with("success","Berhasil menambahkan berita");
+    }
+    public function hapusBerita($id){
+      $Berita = Berita::where("id",$id)->first();
+      if(!$Berita)
+        return view("errors.404");
+      if(Storage::exists("berita/".$id)){
+          Storage::deleteDirectory("berita/".$id);
+      }
+      $Berita->delete();
+      return redirect()->back()->with("success","Berhasil menghapus berita");
+    }
+    public function thumbnail($id,$thumbnail){
+        if(Storage::exists("berita/".$id."/".$thumbnail)){
+            if(request()->has('download'))
+                return Storage::download("berita/".$id."/".$thumbnail);
+            return Storage::get("berita/".$id."/".$thumbnail);
+        }
+        else return "Gagal membuka file, kemungkinan file tidak ada atau error";
     }
 }

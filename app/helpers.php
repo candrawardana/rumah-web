@@ -100,6 +100,8 @@ if (!function_exists('pp_check')){
     function pp_check($id){
         $data=Storage::allFiles("pp/".$id);
         $pp=url('Assets/images/user-default.png');
+        if($id==null || $id!="")
+            return $pp;
         if(count($data)>0){
             $file = $data[0];
             $time = Storage::lastModified($file);
@@ -117,7 +119,7 @@ if (!function_exists('detail_pembuat')){
         $User=User::find($id);
         if($User){
             $name = $User->name;
-            $level = $User->level;
+            $level = $User->jenis;
         }
         return compact("id","name","level","photo");
     }
@@ -129,7 +131,8 @@ if (!function_exists('gambar_thumbnail')){
         if($file==null || $file == "")
             return $pp;
         if(Storage::exists($fitur."/".$id."/".$file)){
-            $pp = url($fitur."/".$id."/".$file);
+            $time = Storage::lastModified($fitur."/".$id."/".$file);
+            $pp = url($fitur."/".$id."/".$file)."?t=".$time;
         }
         return $pp;
     }
@@ -137,6 +140,14 @@ if (!function_exists('gambar_thumbnail')){
 
 if (!function_exists('gambar_second')){
     function gambar_second($link){
+        $pp=url('Assets/images/background.png');
+        if($link==null || $link == "")
+            return $pp;
+        if(Storage::exists($link)){
+            $time = Storage::lastModified($link);
+            $pp = url($link)."?t=".$time;
+        }
+        return $pp;
         return url($link);
         // return ENV("APP_URL_SECOND","http://localhost").str_replace(" ","%20",$link);
     }

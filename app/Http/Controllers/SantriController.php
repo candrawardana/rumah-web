@@ -579,11 +579,13 @@ class SantriController extends Controller
       }
      return view("errors.404");
     }
-    public function foto($file){
-        if(Storage::exists("foto/".$file)){
+    public function foto($file, $file2=""){
+        if($file2!="")
+          $file2="/".$file2;
+        if(Storage::exists("foto/".$file.$file2)){
             if(request()->has('download'))
-                return Storage::download("foto/".$file);
-            return Storage::get("foto/".$file);
+                return Storage::download("foto/".$file.$file2);
+            return Storage::get("foto/".$file.$file2);
         }
         else return "Gagal membuka file, kemungkinan file tidak ada atau error";
     }
