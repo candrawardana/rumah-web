@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kegiatan;
 use Storage;
+use Auth;
 
 class KegiatanController extends Controller
 {
@@ -67,6 +68,9 @@ class KegiatanController extends Controller
       return view("normal.kegiatan",compact("Kegiatan"));
     }
     public function tambahKegiatan(Request $request){
+      if(Auth::user()->jenis!="Administrator"){
+        return view("errors.404");
+      }
       $Kegiatan = new Kegiatan();
       $Kegiatan->kg_tanggal= $request->kg_tanggal;
       $Kegiatan->kg_judul= $request->kg_judul;
@@ -102,6 +106,9 @@ class KegiatanController extends Controller
       return redirect()->back()->with("success","Berhasil menambahkan kegiatan");
     }
     public function hapusKegiatan($id){
+      if(Auth::user()->jenis!="Administrator"){
+        return view("errors.404");
+      }
       $Kegiatan = Kegiatan::where("kg_id",$id)->first();
       if(!$Kegiatan)
         return view("errors.404");

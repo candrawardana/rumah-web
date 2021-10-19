@@ -64,6 +64,9 @@ class BeritaController extends Controller
       return view("normal.berita",compact("Berita"));
     }
     public function tambahBerita(Request $request){
+      if(Auth::user()->jenis!="Administrator"){
+        return view("errors.404");
+      }
       $Berita = new Berita();
       $Berita->title= $request->title;
       $Berita->tempat = $request->tempat;
@@ -89,6 +92,9 @@ class BeritaController extends Controller
       return redirect()->back()->with("success","Berhasil menambahkan berita");
     }
     public function hapusBerita($id){
+      if(Auth::user()->jenis!="Administrator"){
+        return view("errors.404");
+      }
       $Berita = Berita::where("id",$id)->first();
       if(!$Berita)
         return view("errors.404");

@@ -43,7 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/hapus-kegiatan/{id}', 'KegiatanController@hapusKegiatan');
 
     Route::post('/tambah-berita', 'BeritaController@tambahBerita');
-    Route::get('/hapus-berita/{id}', 'BeritaController@hapusBerita');
+    Route::get('/hapus-berita/{id}', 'BeritaController@hapusBerita'); 
 
     Route::get('/santri', 'SantriController@webSantri');
     Route::get('/santri/{id}', 'SantriController@webDetailSantri');
@@ -70,9 +70,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/santri/{id}/wali', 'SantriController@webWaliSantri');
     Route::get('/santri/{id}/edit', 'SantriController@editSantri');
 
-    Route::get('user', 'PenggunaController@user')->name('user');
-    Route::post('user/save', 'PenggunaController@save');
-    Route::post('user/delete', 'PenggunaController@delete');
+    Route::get('/potongan-tabungan', 'SantriController@potonganTabungan');
+    Route::post('/potongan-tabungan', 'SantriController@potonganTabunganProses');
+
+    Route::get('pengguna/{jenis?}', 'PenggunaController@user');
+    Route::get('edit-pengguna/{id}', 'PenggunaController@edit');
+    Route::post('tambah-pengguna', 'PenggunaController@save');
+    Route::get('hapus-pengguna/{id}', 'PenggunaController@delete');
+    Route::get('profil/{id}', 'PenggunaController@profil');
     // Route::get('nodin/{status?}', 'NodinController@nodin')->name('nodin');
     // Route::get('lihat-nodin/{id}/{file}', 'NodinController@lihat');
     // Route::get('lihat-pendukung/{id}/{file}', 'NodinController@lihat2');

@@ -2,14 +2,6 @@
 @section('title')
 Masuk
 @endsection
-@section('script')
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ url('AdminLTE/js/pages/dashboard.js') }}"></script>
-@endsection
-@section('script')
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ url('AdminLTE/js/pages/dashboard.js') }}"></script>
-@endsection
 @section('subtitle')
               <li class="breadcrumb-item"><a href="#">Beranda</a></li>
               <li class="breadcrumb-item active">Dashboard</li>

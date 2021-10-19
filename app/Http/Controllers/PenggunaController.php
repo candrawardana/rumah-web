@@ -23,26 +23,34 @@ class PenggunaController extends Controller
         $User->foto = pp_check($User->id);
         return response()->json(["result"=>"success","title"=>"Berhasil mendapatkan data","data"=>$User]);
     }
-	public function user(Request $request)
+	public function user(Request $request, $jenis="")
     {
-      if(Auth::user()->tipe!="Super Admin"){
-        return "";
+      if(Auth::user()->jenis!="Administrator"){
+        return view("errors.404");
       }
-    	$User = User::orderBy("name","asc");
+    	$Pengguna = User::orderBy("name","asc");
+        $jenis_array = [];
+        if($jenis=="wali")
+            $jenis_array = ["ayah_santri","ibu_santri"];
+        else{
+            $jenis_array = [$jenis];
+        }
+        if($jenis!=""){
+            $Pengguna = $Pengguna->whereIn("jenis",$jenis_array);
+        }
     	$q=null;
     	if ($request->has("q")) {
     		$q=$request->q;
-	    	$User = User::where("name","like","%".$q."%")
-	    	->orWhere("email","like","%".$q."%");
+	    	$Pengguna = $Pengguna->where("name","like","%".$q."%");
     	}
-    	$User = $User->paginate(10)->appends(['q' => $q]);
-        return view('user',compact("User","q"));
+    	$Pengguna = $Pengguna->paginate(25)->appends(['q' => $q]);
+        return view('admin.pengguna',compact("Pengguna","q"));
     }
     public function save(Request $request)
     {
-        if(Auth::user()->tipe!="Super Admin"){
-          return "";
-        }
+      if(Auth::user()->jenis!="Administrator"){
+        return view("errors.404");
+      }
         $rules = [
             'name'                  => 'required|min:3|max:35',
             'email'                 => 'required|email|email',

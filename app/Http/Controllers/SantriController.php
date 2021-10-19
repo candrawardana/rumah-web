@@ -454,7 +454,7 @@ class SantriController extends Controller
     public function webTabunganSantri($id,Request $request){
       $Santri = Santri::where("s_nis",$id)->select("s_nis","s_nama","s_foto")->first();
       $admin = false;
-      if(Auth::user()->jenis=="Ustadz" || Auth::user()->jenis=="Administrator"){
+      if(Auth::user()->jenis=="Administrator"){
         $admin = true;
       }
       if(!$Santri || $admin==false){
@@ -465,7 +465,7 @@ class SantriController extends Controller
       return view("normal.tabungan",compact("Santri","Tabungan"));
     }
     public function tambahTabungan(Request $request){
-      if(Auth::user()->jenis=="Ustadz" || Auth::user()->jenis=="Administrator"){
+      if(Auth::user()->jenis=="Administrator"){
         $Tabungan = new Tabungan();
         $Tabungan->s_nis = $request->s_nis;
         $Tabungan->t_tanggal = $request->t_tanggal;
@@ -488,12 +488,6 @@ class SantriController extends Controller
         $t_nominal = str_replace(".","",$t_nominal);
         if($t_penarikan == ''){
           $t_penarikan = '-';
-        }
-        if ($request->t_keterangan == 'Penarikan') {
-          $t_saldo = $t_saldo - $request->t_saldo;
-        }
-        else{
-          $t_saldo = $t_saldo + $request->t_saldo;          
         }
         if ($request->t_keterangan == 'Penarikan') {
           $t_kredit = $t_nominal;
@@ -588,5 +582,57 @@ class SantriController extends Controller
             return Storage::get("foto/".$file.$file2);
         }
         else return "Gagal membuka file, kemungkinan file tidak ada atau error";
+    }
+
+    public function potonganTabungan(){
+      if(Auth::user()->jenis=="Administrator"){
+        $Santri = Santri::orderBy("s_nama","asc")->select("s_nis","s_nama")->get();
+        return view("admin.potongan-tabungan",compact("Santri"));
+      }
+      return view("errors.404");
+    }
+    public function potonganTabunganProses(Request $request){
+      if(Auth::user()->jenis!="Administrator"){
+        return view("errors.404");
+      }
+      $semua_s_nis=$request->santri;
+      foreach($semua_s_nis as $s_nis){
+        $Tabungan = new Tabungan();
+        $Tabungan->s_nis = $s_nis;
+        $Tabungan->t_tanggal = $request->t_tanggal;
+        $time = strtotime($request->t_tanggal);
+        $Tabungan->tanggal = date('Y-m-d',$time);
+        $Dana = Dana::where("related_id",$s_nis)->where("jenis","tabungan")->first();
+          if(!$Dana){
+              $Dana = new Dana();
+              $Dana->jenis = "tabungan";
+              $Dana->related_id = $s_nis;
+              $Dana->dana=0;
+              $Dana->save();
+        }
+        $t_saldo = $Dana->dana;
+        $t_penarikan = $request->t_penarikan;
+        $t_kredit = 0;
+        $t_debet = 0;
+        $t_nominal = $request->t_nominal;
+        $t_nominal = str_replace(".","",$t_nominal);
+        if($t_penarikan == ''){
+          $t_penarikan = '-';
+        }
+        $t_kredit = $t_nominal;
+        $t_saldo = $t_saldo - $t_kredit;
+        $t_keterangan = $t_penarikan;
+        $Tabungan->t_debet = $t_debet;
+        $Tabungan->t_kredit = $t_kredit;
+        $Tabungan->t_saldo = $t_saldo;
+        $Tabungan->t_keterangan = $t_keterangan;
+        $Tabungan->save();
+        if($Tabungan){
+          $Dana->dana = $t_saldo;
+          $Dana->save();
+
+        }
+      }
+      return Redirect::back()->with("success","Berhasil menambahkan potongan tabungan");
     }
 }
