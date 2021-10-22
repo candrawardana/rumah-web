@@ -156,7 +156,7 @@
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ url('akun') }}" role="button">
+        <a class="nav-link" href="{{ url('edit-pengguna') }}" role="button">
           <i class="fa fa-cog"></i>
         </a>
       </li>
@@ -278,6 +278,14 @@
           </li>
           <li class="nav-header">Pengguna</li>
           <li class="nav-item">
+            <a href="{{ url('pengguna') }}" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                Semua Pengguna
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="{{ url('pengguna/Administrator') }}" class="nav-link">
               <i class="nav-icon fas fa-cogs"></i>
               <p>
@@ -303,7 +311,7 @@
           </li>
           <li class="nav-item">
             <a href="{{ url('santri') }}" class="nav-link">
-              <i class="nav-icon fas fa-users"></i>
+              <i class="nav-icon fas fa-leaf"></i>
               <p>
                 Santri
               </p>

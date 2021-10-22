@@ -23,7 +23,7 @@ Route::get('/kegiatan', 'KegiatanController@apiKegiatan');
 Route::get('/kegiatan/{id}', 'KegiatanController@apiDetailKegiatan');
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
-	Route::get('/profil', 'PenggunaController@profil');
+	Route::get('/profil/{id?}', 'PenggunaController@profil');
 	Route::get('/pembayaran', 'PembayaranController@apiPembayaran');
 	Route::get('/pembayaran/{id}', 'PembayaranController@apiDetailPembayaran');
 

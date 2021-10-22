@@ -32,6 +32,8 @@ Route::get('/gallery/{file}', 'DashboardController@gallery');
 Route::get('/foto/{file}/{file2?}', 'SantriController@foto');
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/notifikasi', 'DashboardController@notifikasi');
+
     Route::get('/hapus-gallery/{nomor}', 'DashboardController@galleryHapus');
     Route::post('/tambah-gallery', 'DashboardController@galleryTambah');
 
@@ -74,10 +76,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/potongan-tabungan', 'SantriController@potonganTabunganProses');
 
     Route::get('pengguna/{jenis?}', 'PenggunaController@user');
-    Route::get('edit-pengguna/{id}', 'PenggunaController@edit');
+    Route::get('edit-pengguna/{id?}', 'PenggunaController@edit');
     Route::post('tambah-pengguna', 'PenggunaController@save');
     Route::get('hapus-pengguna/{id}', 'PenggunaController@delete');
-    Route::get('profil/{id}', 'PenggunaController@profil');
+    Route::get('profil/{id?}', 'PenggunaController@webprofil');
     // Route::get('nodin/{status?}', 'NodinController@nodin')->name('nodin');
     // Route::get('lihat-nodin/{id}/{file}', 'NodinController@lihat');
     // Route::get('lihat-pendukung/{id}/{file}', 'NodinController@lihat2');

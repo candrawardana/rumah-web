@@ -1,5 +1,6 @@
 <?php
 use App\Models\User;
+use App\Models\Santri;
 use App\Models\Ayah;
 use App\Models\Ibu;
 use App\Models\Nodin;
@@ -82,6 +83,12 @@ if(!function_exists('jumlah_user')){
 	}
 }
 
+if(!function_exists('list_santri')){
+    function list_santri(){
+        return Santri::orderBy("s_nama","asc")->select("s_nis","s_nama")->get();
+    }
+}
+
 if ( !function_exists('mysql_escape'))
 {
     function mysql_escape($inp)
@@ -100,8 +107,6 @@ if (!function_exists('pp_check')){
     function pp_check($id){
         $data=Storage::allFiles("pp/".$id);
         $pp=url('Assets/images/user-default.png');
-        if($id==null || $id!="")
-            return $pp;
         if(count($data)>0){
             $file = $data[0];
             $time = Storage::lastModified($file);
@@ -171,9 +176,11 @@ if (!function_exists('nomor')){
 }
 
 if (!function_exists('notifikasi')){
-    function notifikasi(){
+    function notifikasi($semua=0){
         $Notifikasi=new stdClass();
         $list=Notifikasi::where("user_id",Auth::id())->where("dilihat",0)->orderBy("created_at","desc")->limit(5)->get();
+        if($semua==1)
+        $list=Notifikasi::where("user_id",Auth::id())->where("dilihat",0)->orderBy("created_at","desc")->get();
         foreach($list as $l){
             $l->notifikasi_related=notifikasi_related($l);
         }

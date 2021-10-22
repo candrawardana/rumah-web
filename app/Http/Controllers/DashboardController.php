@@ -17,6 +17,11 @@ class DashboardController extends Controller
         return view('normal.policy');
     }
 
+    public function notifikasi()
+    {
+        return view('normal.notifikasi');
+    }
+
     public function home()
     {
         $view = "welcome";
@@ -75,6 +80,9 @@ class DashboardController extends Controller
         return Redirect::back();
     }
     public function galleryTambah(Request $request){
+        if(Auth::user()->jenis!="Administrator"){
+            return Redirect::back();
+        }
         if($request->hasFile('file')){
             if(Storage::exists("gallery/".$request->file('file')->getClientOriginalName())){
                 Storage::delete("gallery/".$request->file('file')->getClientOriginalName());

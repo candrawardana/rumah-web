@@ -586,8 +586,7 @@ class SantriController extends Controller
 
     public function potonganTabungan(){
       if(Auth::user()->jenis=="Administrator"){
-        $Santri = Santri::orderBy("s_nama","asc")->select("s_nis","s_nama")->get();
-        return view("admin.potongan-tabungan",compact("Santri"));
+        return view("admin.potongan-tabungan");
       }
       return view("errors.404");
     }
