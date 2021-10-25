@@ -91,6 +91,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('ganti-pp', 'PenggunaController@ppupload');
     Route::get('hapus-pp', 'PenggunaController@pphapus');
 
+    Route::get('laporan/uang-syariah', 'LaporanController@uangSyariah');
+    Route::post('laporan/uang-syariah', 'LaporanController@uangSyariahCetak');
+    Route::get('laporan/tabungan', 'LaporanController@tabungan');
+    Route::post('laporan/tabungan', 'LaporanController@tabunganCetak');
+    Route::get('laporan/hafalan', 'LaporanController@hafalan');
+    Route::post('laporan/hafalan', 'LaporanController@hafalanCetak');
+    Route::get('laporan/hafalan-baru', 'LaporanController@hafalanBaru');
+    Route::post('laporan/hafalan-baru', 'LaporanController@hafalanBaruCetak');
+
     Route::get('migrasi/tabungan', 'MigrasiDataController@tabungan');
     Route::get('migrasi/hafalan', 'MigrasiDataController@hafalan');
     Route::get('migrasi/hafalan-baru', 'MigrasiDataController@hafalanBaru');
