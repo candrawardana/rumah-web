@@ -1,6 +1,5 @@
 @extends('template.cetak')
 @section('content')
-		<hr style="margin-bottom: 20px;">
 			<h5 style="margin-bottom: 30px;"><center>
 				<span style="font-size: 24px;"><strong>Laporan Pembayaran Uang Syari'ah</strong></span><br>
 				<span style="font-size: 20px;">{{ $jenis }}</span>

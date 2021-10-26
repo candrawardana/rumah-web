@@ -12,6 +12,7 @@ use App\Models\Hafalan;
 use App\Models\HafalanBaru;
 use App\Models\Kesalahan;
 use App\Models\Tabungan;
+use App\Models\Dana;
 use App\Models\UangSyariah;
 use App\Models\Pengumuman;
 use App\Models\Kegiatan;
@@ -19,50 +20,66 @@ use App\Models\Kegiatan;
 class LaporanController extends Controller
 {
     public function tabungan(Request $request){
-        if(Auth::user()->jenis=="Administrator"){
-            $p = 1;
-            if($request->has("page")){
-                $p=$request->page;
-            }
-            $Tabungan = Tabungan::orderBy("id","asc")->paginate(2000);
-            $count = 0;
-            foreach($Tabungan as $d){
-                $time = strtotime($d->t_tanggal);
-                $d->tanggal = date('Y-m-d',$time);
-                $d->save();
-                $count++;
-            }
-            $p++;
-            if($count==0)
-                return "selesai";
-            return "<a href='".url("migrasi/tabungan?page=".$p)."'>Lanjut ke ".$p."</a>";
+        if(Auth::user()->jenis!="Administrator"){
+            return view('errors.404');
         }
+        $Santri = Santri::orderBy("s_nis","asc")->select("s_nis","s_nama")->get();
+        foreach($Santri as $s){
+            $Dana = Dana::where("related_id",$s->s_nis)->where("jenis","tabungan")->first();
+            if(!$Dana){
+                $Dana = new Dana();
+                $Dana->jenis = "tabungan";
+                $Dana->related_id = $s->s_nis;
+                $Tabungan = Tabungan::where("s_nis",$s->s_nis)->orderBy("tanggal","desc")->first();
+                $d = 0;
+                if($Tabungan)
+                    $d = $Tabungan->t_saldo;
+                $Dana->dana=$d;
+                $Dana->save();
+            }
+            $s->tabungan = $Dana->dana;
+        }
+        return view('admin.cetak-tabungan', compact("Santri"));
     }
     public function hafalan(Request $request){
-        if(Auth::user()->jenis=="Administrator"){
-            $p = 1;
-            if($request->has("page")){
-                $p=$request->page;
-            }
-            $Hafalan = Hafalan::orderBy("h_id","asc")->paginate(2000);
-            $count = 0;
-            foreach($Hafalan as $d){
-                $time = strtotime($d->h_tanggal);
-                $d->tanggal = date('Y-m-d',$time);
-                $d->save();
-                $count++;
-            }
-            $p++;
-            if($count==0)
-                return "selesai";
-            return "<a href='".url("migrasi/hafalan?page=".$p)."'>Lanjut ke ".$p."</a>";
+        if(Auth::user()->jenis!="Administrator"){
+            return view('errors.404');
         }
+        return view('admin.laporan-hafalan');
+    }
+    public function hafalanCetak(Request $request){
+        if(Auth::user()->jenis!="Administrator"){
+            return view('errors.404');
+        }
+        if(!$request->has("mtgl")){
+            return view('errors.404');
+        }
+        $tanggal = strtotime($request->mtgl);
+        $tanggal = date('Y-m-d',$tanggal);
+        $Hafalan = Hafalan::where("tanggal",$tanggal)
+        ->leftJoin("santri","santri.s_nis","=","hafalan.s_nis")
+        ->select("hafalan.*","santri.s_nama")->orderBy("santri.s_nama","asc")->get();
+        return view('admin.cetak-hafalan', compact("tanggal","Hafalan"));
     }
     public function hafalanBaru(Request $request){
         if(Auth::user()->jenis!="Administrator"){
             return view('errors.404');
         }
         return view('admin.laporan-hafalan-baru');
+    }
+    public function hafalanBaruCetak(Request $request){
+        if(Auth::user()->jenis!="Administrator"){
+            return view('errors.404');
+        }
+        if(!$request->has("mtgl")){
+            return view('errors.404');
+        }
+        $tanggal = strtotime($request->mtgl);
+        $tanggal = date('Y-m-d',$tanggal);
+        $HafalanBaru = HafalanBaru::where("tanggal",$tanggal)
+        ->leftJoin("santri","santri.s_nis","=","hafalanbaru.s_nis")
+        ->select("hafalanbaru.*","santri.s_nama")->orderBy("santri.s_nama","asc")->get();
+        return view('admin.cetak-hafalan-baru', compact("tanggal","HafalanBaru"));
     }
     public function uangSyariah(Request $request){
         if(Auth::user()->jenis!="Administrator"){
@@ -100,13 +117,8 @@ class LaporanController extends Controller
         else{
             return view('errors.404');
         }
-        $UangSyariah = $UangSyariah->get();
-        foreach($UangSyariah as $u){
-            $u->s_nama = "-";
-            $Santri = Santri::find($u->s_nis);
-            if($Santri)
-                $u->s_nama = $Santri->s_nama;
-        }
+        $UangSyariah = $UangSyariah->leftJoin("santri","santri.s_nis","=","uangsyariah.s_nis")
+        ->select("uangsyariah.*","santri.s_nama")->get();
         return view('admin.cetak-uang-syariah', compact("jenis","UangSyariah"));
     }
 }

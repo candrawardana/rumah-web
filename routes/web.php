@@ -72,6 +72,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/santri/{id}/wali', 'SantriController@webWaliSantri');
     Route::get('/santri/{id}/edit', 'SantriController@editSantri');
 
+
+    Route::get('/pembelian', 'PembayaranController@pembelian');
+    Route::get('/pembayaran', 'PembayaranController@webPembayaran');
+    Route::get('/bagi-hasil', 'PembayaranController@bagiHasil');
+
     Route::get('/potongan-tabungan', 'SantriController@potonganTabungan');
     Route::post('/potongan-tabungan', 'SantriController@potonganTabunganProses');
 

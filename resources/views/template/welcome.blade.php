@@ -327,7 +327,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ url('laporan/tabungan') }}" class="nav-link">
+            <a href="{{ url('laporan/tabungan') }}" class="nav-link" target="_blank">
               <i class="nav-icon fas fa-print"></i>
               <p>
                 Tabungan

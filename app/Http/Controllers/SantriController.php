@@ -130,7 +130,7 @@ class SantriController extends Controller
         else{
             $Santri = Santri::whereIn("s_nis",$SantriID);
         }
-        $Santri = $Santri->orderBy("s_nama","asc")->paginate(50);
+        $Santri = $Santri->orderBy("s_nis","asc")->paginate(50);
         $Santri->appends(['q' => $q]);
         foreach($Santri as $s){
             $s->foto = gambar_second($s->s_foto);
