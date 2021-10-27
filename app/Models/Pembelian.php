@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuids;
 
-class Pembayaran extends Model
+class Pembelian extends Model
 {
     use HasFactory,Uuids;
-    protected $table = 'pembayaran_anggota';
+    protected $table = 'pembelian_koperasi';
     public $incrementing = false;
     public $timestamps = false;
 }

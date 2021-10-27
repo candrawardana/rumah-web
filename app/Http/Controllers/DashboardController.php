@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use DB;
 use App\Models\Kegiatan;
 use App\Models\Berita;
+use App\Models\Santri;
+use App\Models\Pembelian;
+use App\Models\User;
 use Storage;
 use Auth;
 use Redirect;
@@ -30,10 +33,10 @@ class DashboardController extends Controller
                 $view = 'admin.home';
             }
         }
-        $Dana = 0;
-        $Santri = 0;
-        $Donator = 0;
-        $Koperasi = 0;
+        $Dana = nomor(lihat_dana());
+        $Santri = Santri::count();
+        $Donator = User::where("jenis","donator")->count();
+        $Koperasi = Pembelian::count();
         $Kegiatan = Kegiatan::orderBy("kg_tanggal","desc")->limit(3)->get();
         foreach($Kegiatan as $b){
             $b->kg_foto = gambar_second("/foto/kegiatan/".explode("|",$b->kg_foto)[0]);

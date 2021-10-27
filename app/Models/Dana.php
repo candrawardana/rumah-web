@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Dana extends Model
 {
     use HasFactory;
-    protected $primaryKey = null;
+    protected $primaryKey = "related_id";
     protected $table = 'dana';
     public $incrementing = false;
-    public $timestamps = false;
 }

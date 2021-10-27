@@ -27,13 +27,27 @@ Pembayaran
 							<input name="nilai" id="nilai" type="number" class="validate">
 							<label for="nilai">Jumlah Nilai</label>
 						</div>
+						<!-- TANGGAL -->
+						<div class="input-field">
+							<input name="tanggal" id="tanggal" type="text" class="datepicker">
+							<label for="tanggal">Tanggal Pembayaran</label>
+						</div>
 						<!-- JENIS -->
 						<div class="input-field">
 							<select name="jenis" id="jenis">
 								<option value="Wajib">Wajib</option>
-								<option value="Simpanan">Simpanan</option>
+								<option value="Pokok">Pokok</option>
+								<option value="Sukarela">Sukarela</option>
 							</select>
 							<label for="jenis">Jenis</label>
+						</div>
+						<!-- DANA -->
+						<div class="input-field">
+							<select name="dana" id="dana">
+								<option value="1" selected>Ya</option>
+								<option value="0">Tidak</option>
+							</select>
+							<label for="dana">Perbarui Dana</label>
 						</div>
 						<div align="right">
 							<button class="btn green waves-effect waves-light" type="submit" name="submit">Simpan	<i class="material-icons right">send</i>
@@ -66,6 +80,7 @@ Pembayaran
 					<th>NIP</th>
 					<th>Nama</th>
 					<th>Jenis</th>
+					<th>Tanggal</th>
 					<th colspan="2">Nilai</th>
 					<th>Opsi</th>
 				</tr>
@@ -77,8 +92,9 @@ Pembayaran
 				@foreach($Pembayaran as $p)
 						<tr>
 							<td>{{ $i }}</td>
-							<td>{{ $p->pembuat["name"] }}</td>
+							<td>{{ $p->name }}</td>
 							<td>{{ $p->jenis }}</td>
+							<td>{{ $p->tanggal }}</td>
 							<td>Rp.</td>
 							<td>{{ nomor($p->nilai) }}</td>
 							<td>

@@ -13,14 +13,14 @@ Masuk
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>150</h3>
+                <h3>{{ $Koperasi }}</h3>
 
                 <p>Pembelian Koperasi</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="{{ url('santri') }}" class="small-box-footer">Selengkapnya... <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="{{ url('pembelian') }}" class="small-box-footer">Selengkapnya... <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -28,7 +28,7 @@ Masuk
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>53<sup style="font-size: 20px">Rp</sup></h3>
+                <h3>{{ $Dana }}<sup style="font-size: 20px">Rp</sup></h3>
 
                 <p>Seluruh Dana</p>
               </div>
@@ -43,7 +43,7 @@ Masuk
             <!-- small box -->
             <div class="small-box bg-primary">
               <div class="inner">
-                <h3>44</h3>
+                <h3>{{ $Santri }}</h3>
 
                 <p>Santri</p>
               </div>
@@ -58,7 +58,7 @@ Masuk
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>65</h3>
+                <h3>{{ $Donator }}</h3>
 
                 <p>Donator</p>
               </div>

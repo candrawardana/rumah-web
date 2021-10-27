@@ -5,6 +5,7 @@ use App\Models\Ayah;
 use App\Models\Ibu;
 use App\Models\Nodin;
 use App\Models\Notifikasi;
+use App\Models\Dana;
 
 if(!function_exists('judul_situs')){
     function judul_situs($singkat = 0){
@@ -12,6 +13,33 @@ if(!function_exists('judul_situs')){
             return "RT Darul Adib";
         }
         return "Rumah Tahfiz Darul Adib";
+    }
+}
+
+if(!function_exists('lihat_dana')){
+    function lihat_dana(){
+        $Dana = Dana::where("jenis","dana")->where("related_id","utama")->first();
+        if(!$Dana){
+            return 0;
+        }
+        return $Dana->dana;
+    }
+}
+
+if(!function_exists('tambah_dana')){
+    function tambah_dana($tambahan){
+        $Dana = Dana::where("jenis","dana")->where("related_id","utama")->first();
+        if(!$Dana){
+            $Dana = new Dana();
+            $Dana->jenis="dana";
+            $Dana->related_id="utama";
+            $Dana->dana=$tambahan;
+            $Dana->save();
+            return $Dana;
+        }
+        $Dana->dana = $Dana->dana+$tambahan;
+        $Dana->save();
+        return $Dana;
     }
 }
 

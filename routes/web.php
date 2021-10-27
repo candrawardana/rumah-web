@@ -75,6 +75,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/pembelian', 'PembayaranController@pembelian');
     Route::get('/pembayaran', 'PembayaranController@webPembayaran');
+    Route::get('/edit-pembayaran/{id}', 'PembayaranController@editPembayaran');
+    Route::post('/edit-pembayaran/{id}', 'PembayaranController@editPembayaranProses');
+    Route::get('/hapus-pembayaran/{id}', 'PembayaranController@hapusPembayaran');
+    Route::post('/hapus-pembayaran/{id}', 'PembayaranController@hapusPembayaranProses');
+    Route::post('/tambah-pembayaran', 'PembayaranController@tambahPembayaran');
     Route::get('/bagi-hasil', 'PembayaranController@bagiHasil');
 
     Route::get('/potongan-tabungan', 'SantriController@potonganTabungan');
