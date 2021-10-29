@@ -29,6 +29,16 @@ class AuthController extends Controller
         }
         return view('login');
     }
+
+    public function apiNotifikasi()
+    {
+        $respon = [
+            'result' => 'info',
+            'title' => 'orang tua',
+            'data' => notifikasi(1)->list
+        ];
+        return response()->json($respon,200);
+    }
   
     public function login(Request $request)
     {

@@ -3,7 +3,7 @@
 Edit Pembayaran {{ $Pembayaran->name }}
 @endsection
 @section('subtitle')
-              <li class="breadcrumb-item"><a href="{{ url('pembayaran') }}">Pembayaran</a></li>
+              <li class="breadcrumb-item"><a href="{{ url('pembayaran') }}">Pembayaran Anggota</a></li>
               <li class="breadcrumb-item active">Edit Pembayaran {{ $Pembayaran->name }}</li>
 @endsection
 @section('content')

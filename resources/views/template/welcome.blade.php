@@ -162,7 +162,7 @@
       </li>
       <!-- Logout -->
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{ url('logout') }}" class="nav-link bg-danger"><i class="fa fa-power-off"></i> Logout</a>
+        <a href="{{ url('logout') }}" class="nav-link bg-danger"><i class="fa fa-power-off"></i></a>
       </li>
     </ul>
   </nav>

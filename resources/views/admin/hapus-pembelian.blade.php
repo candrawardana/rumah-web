@@ -1,10 +1,10 @@
 @extends('template.welcome')
 @section('title')
-Hapus Pembayaran {{ $Pembayaran->name }}
+Pembelian Koperasi {{ $Pembelian->name }}
 @endsection
 @section('subtitle')
-              <li class="breadcrumb-item"><a href="{{ url('pembayaran') }}">Pembayaran Anggota</a></li>
-              <li class="breadcrumb-item active">Hapus Pembayaran {{ $Pembayaran->name }}</li>
+              <li class="breadcrumb-item"><a href="{{ url('pembelian') }}">Pembelian Koperasi</a></li>
+              <li class="breadcrumb-item active">Hapus Pembelian {{ $Pembelian->name }}</li>
 @endsection
 @section('content')
 <div class="row" style="margin-top: 40px">

@@ -6,6 +6,7 @@ use App\Models\Ibu;
 use App\Models\Nodin;
 use App\Models\Notifikasi;
 use App\Models\Dana;
+use App\Models\Pembelian;
 
 if(!function_exists('judul_situs')){
     function judul_situs($singkat = 0){
@@ -16,9 +17,25 @@ if(!function_exists('judul_situs')){
     }
 }
 
+if(!function_exists('hitung_pembelian_koperasi')){
+    function hitung_pembelian_koperasi(Pembelian $pembelian){
+        $total_jual = $pembelian->jual*$pembelian->terjual;
+        $modal_jual = $pembelian->jumlah*$pembelian->modal;
+        $selisih_jual = ($pembelian->jual-$pembelian->modal)*$pembelian->terjual;
+        $untung = $total_jual - $modal_jual;
+        //tunggu yang dipakai, selisih jual atau untung
+        $dipakai = $untung;
+        $anggota = 0.1*$dipakai;
+        $koperasi = 0.7*$dipakai;
+        $petugas = 0.1*$dipakai;
+        $yayasan = 0.1*$dipakai;
+        return compact("total_jual","selisih_jual","untung","anggota","koperasi","petugas","yayasan");
+    }
+}
+
 if(!function_exists('lihat_dana')){
-    function lihat_dana(){
-        $Dana = Dana::where("jenis","dana")->where("related_id","utama")->first();
+    function lihat_dana($id="utama"){
+        $Dana = Dana::where("jenis","dana")->where("related_id",$id)->first();
         if(!$Dana){
             return 0;
         }
@@ -27,12 +44,12 @@ if(!function_exists('lihat_dana')){
 }
 
 if(!function_exists('tambah_dana')){
-    function tambah_dana($tambahan){
-        $Dana = Dana::where("jenis","dana")->where("related_id","utama")->first();
+    function tambah_dana($tambahan,$id="utama"){
+        $Dana = Dana::where("jenis","dana")->where("related_id",$id)->first();
         if(!$Dana){
             $Dana = new Dana();
             $Dana->jenis="dana";
-            $Dana->related_id="utama";
+            $Dana->related_id=$id;
             $Dana->dana=$tambahan;
             $Dana->save();
             return $Dana;
@@ -230,7 +247,7 @@ if (!function_exists('notifikasi_related')){
         $icon = "fas fa-envelope";
         $link = url($Notifikasi->jenis."/".$Notifikasi->related_id);
         if($Notifikasi->jenis=="url"){
-            $icon = "fas fa-external-link";
+            $icon = "fas fa-link";
             $link = $Notifikasi->related_id;
         }
         if($Notifikasi->jenis=="santri"){

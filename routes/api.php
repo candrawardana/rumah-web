@@ -37,4 +37,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 	Route::get('/santri/{id}/kesalahan', 'SantriController@apiKesalahanSantri');
 
 	Route::get('/pengumuman', 'PengumumanController@apiPengumuman');
+
+	Route::get('/notifikasi', 'AuthController@apiNotifikasi');
+
 });

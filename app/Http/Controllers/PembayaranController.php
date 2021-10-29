@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pembayaran;
+use App\Models\Pembelian;
 use App\Models\Dana;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -75,7 +76,7 @@ class PembayaranController extends Controller
       $Pembayaran->nilai = $request->nilai;
       $Pembayaran->save();
       if($request->dana=="1"){
-        tambah_dana($nilai_awal+$request->nilai);
+        tambah_dana($nilai_awal+$request->nilai,"k.".$Pembayaran->user_id);
       }
       return redirect("/pembayaran")->with("success","Berhasil mengubah data");
     }
@@ -100,7 +101,7 @@ class PembayaranController extends Controller
       if(!$Pembayaran)
         return redirect("/pembayaran")->with("error","Gagal Menyimpan");
       if($Pembayaran->delete() && $request->dana=="1"){
-        tambah_dana(-$Pembayaran->nilai);
+        tambah_dana(-$Pembayaran->nilai,"k.".$Pembayaran->user_id);
       }
       return redirect("/pembayaran")->with("success","Berhasil menghapus data");
     }
@@ -122,21 +123,156 @@ class PembayaranController extends Controller
       if(!$Pembayaran)
         return redirect()->back()->with("error","Gagal Menyimpan");
       if($request->dana=="1"){
-        tambah_dana($request->nilai);
+        tambah_dana($request->nilai,"k.".$Pembayaran->user_id);
       }
       return redirect()->back()->with("success","Berhasil menambahkan pembayaran");
     }
-    public function pembelian(Request $request){
-      $pembayaran = Pembayaran::orderBy("tanggal","desc");
+
+
+    public function pembelian($q,$view){
       if(Auth::user()->jenis!="Administrator"){
-        $pembayaran = $pembayaran->where("user_id",Auth::user()->id);
+        $q=Auth::user()->username;
       }
-      $pembayaran = $pembayaran->paginate(50);
-      foreach($pembayaran as $b){
-        $b->pembuat = detail_pembuat($b->user_id);
+      $Pembelian = Pembelian::orderBy("pembelian_koperasi.nama","desc");
+      $Pembelian = $Pembelian->leftJoin("users","pembelian_koperasi.user_id","=","users.id");
+      $Pembelian = $Pembelian->select("users.name","pembelian_koperasi.*");
+      if($q!=""){
+        $Pembelian = $Pembelian->where("users.username",$q);
       }
-      return response()->json(['result' => 'success', 'title' => 'Pembayaran berhasil ditemukan','data'=>$pembayaran]);
+      $Pembelian = $Pembelian->get();
+      $total=[];
+      foreach($Pembelian as $p){
+        $p->hitung = hitung_pembelian_koperasi($p);
+      }
+      return view($view,compact("Pembelian","total","q"));
     }
+    public function webPembelian(Request $request){
+      $q="";
+      if(Auth::user()->jenis!="Administrator"){
+        return view("errors.404");
+      }
+      if($request->has('q')){
+        $q=$request->q;
+      }
+      return $this->pembelian($q,"admin.pembelian");
+    }
+    public function editPembelian($id){
+      if(Auth::user()->jenis!="Administrator"){
+        return view("errors.404");
+      }
+      $Pembelian = Pembelian::where("pembelian_koperasi.id",$id);
+      $Pembelian = $Pembelian->leftJoin("users","pembelian_koperasi.user_id","=","users.id");
+      $Pembelian = $Pembelian->select("users.name","pembelian_koperasi.*");
+      $Pembelian = $Pembelian->first();
+      if(!$Pembelian)
+        return view("errors.404");
+      $tanggal = strtotime($Pembelian->tanggal);
+      $tanggal = date('d-m-Y',$tanggal);
+      $Pembelian->tanggal=$tanggal;
+      return view("admin.edit-pembelian",compact("Pembelian"));
+    }
+    public function editPembelianProses(Request $request,$id){
+      if(Auth::user()->jenis!="Administrator"){
+        return view("errors.404");
+      }
+      $Pembelian=Pembelian::find($id);
+      if(!$Pembelian)
+        return redirect("/pembelian")->with("error","Gagal Menyimpan");
+      if($request->terjual>$Pembelian->jumlah){
+        return redirect()->back()->with("error","Jumlah terjual melebihi stok");
+      }
+      $selisih = ($request->terjual-$Pembelian->terjual)*$Pembelian->jual;
+      if($request->dana=="1" && lihat_dana("k.".$Pembelian->user_id)<(-$selisih)){
+        return redirect()->back()->with("error","Dana dia tidak mencukupi");
+      }
+      $tanggal = strtotime($request->tanggal);
+      $tanggal = date('Y-m-d',$tanggal);
+      $Pembelian->tanggal = $tanggal;
+      $Pembelian->faktur = $request->faktur;
+      $Pembelian->kode = $request->kode;
+      $Pembelian->nama = $request->nama;
+      $Pembelian->terjual = $request->terjual;
+      $Pembelian->save();
+      if($request->dana=="1"){
+        tambah_dana($selisih,"k.".$Pembelian->user_id);
+      }
+      return redirect("/pembelian")->with("success","Berhasil mengubah data");
+    }
+    public function hapusPembelian($id){
+      if(Auth::user()->jenis!="Administrator"){
+        return view("errors.404");
+      }
+      $Pembelian = Pembelian::where("pembelian_koperasi.id",$id);
+      $Pembelian = $Pembelian->leftJoin("users","pembelian_koperasi.user_id","=","users.id");
+      $Pembelian = $Pembelian->select("users.name","pembelian_koperasi.*");
+      $Pembelian = $Pembelian->first();
+      if(!$Pembelian)
+        return view("errors.404");
+      $tanggal = strtotime($Pembelian->tanggal);
+      $tanggal = date('d-m-Y',$tanggal);
+      $Pembelian->tanggal=$tanggal;
+      return view("admin.hapus-pembelian",compact("Pembelian"));
+    }
+    public function hapusPembelianProses(Request $request,$id){
+      if(Auth::user()->jenis!="Administrator"){
+        return view("errors.404");
+      }
+      $Pembelian=Pembelian::find($id);
+      if(!$Pembelian)
+        return redirect("/pembelian")->with("error","Gagal Menyimpan");
+      $selisih = ($Pembelian->terjual*$Pembelian->jual)-($Pembelian->modal*$Pembelian->jumlah);
+      if($request->dana=="1" && lihat_dana("k.".$Pembelian->user_id)<$selisih){
+        return redirect()->back()->with("error","Dana dia tidak mencukupi");
+      }
+      if($Pembelian->delete() && $request->dana=="1"){
+        tambah_dana(-$selisih,"k.".$Pembelian->user_id);
+      }
+      return redirect("/pembelian")->with("success","Berhasil menghapus data");
+    }
+    public function tambahPembelian(Request $request){
+      if(Auth::user()->jenis!="Administrator"){
+        return view("errors.404");
+      }
+      $User = User::where("username",$request->username)->first();
+      if(!$User)
+        return redirect()->back()->with("error","Akun tidak ditemukan");
+
+      if($request->terjual>$request->jumlah){
+        return redirect()->back()->with("error","Jumlah terjual melebihi stok");
+      }
+      if($request->jual<=$request->modal){
+        return redirect()->back()->with("error","Koperasi ini tidak ada untungnya");
+      }
+      if($request->modal == 0 || $request->jumlah == 0){
+        return redirect()->back()->with("error","Jumlah yang dijual tidak masuk akal");
+      }
+
+      $Pembelian = new Pembelian();
+      $Pembelian->user_id = $User->id;
+      $tanggal = strtotime($request->tanggal);
+      $tanggal = date('Y-m-d',$tanggal);
+      $Pembelian->tanggal = $tanggal;
+      $Pembelian->faktur = $request->faktur;
+      $Pembelian->kode = $request->kode;
+      $Pembelian->nama = $request->nama;
+      $Pembelian->modal = $request->modal;
+      $Pembelian->jumlah = $request->jumlah;
+      $Pembelian->jual = $request->jual;
+      $Pembelian->terjual = $request->terjual;
+      $harga = ($request->jual*$request->terjual)-($request->jumlah*$request->modal);
+      if($request->dana=="1" && lihat_dana("k.".$User->id)<(-$harga)){
+        return redirect()->back()->with("error","Dana ".$User->name." tidak mencukupi");
+      }
+      $Pembelian->save();
+      if(!$Pembelian)
+        return redirect()->back()->with("error","Gagal Menyimpan");
+      if($request->dana=="1"){
+        tambah_dana($harga,"k.".$Pembelian->user_id);
+      }
+      return redirect()->back()->with("success","Berhasil menambahkan pembelian dengan biaya Rp. ".$harga);
+    }
+
+
     public function bagiHasil(Request $request){
       $pembayaran = Pembayaran::orderBy("tanggal","desc");
       if(Auth::user()->jenis!="Administrator"){

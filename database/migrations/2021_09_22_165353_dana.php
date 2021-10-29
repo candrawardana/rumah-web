@@ -15,7 +15,7 @@ class Dana extends Migration
     {
         Schema::create('dana', function (Blueprint $table) {
             $table->string('jenis',8);
-            $table->string('related_id');
+            $table->string('related_id')->primary();
             $table->bigInteger('dana');
             $table->timestamps();
         });

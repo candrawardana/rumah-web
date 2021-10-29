@@ -73,7 +73,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/santri/{id}/edit', 'SantriController@editSantri');
 
 
-    Route::get('/pembelian', 'PembayaranController@pembelian');
+    Route::get('/pembelian', 'PembayaranController@webPembelian');
+    Route::get('/edit-pembelian/{id}', 'PembayaranController@editPembelian');
+    Route::post('/edit-pembelian/{id}', 'PembayaranController@editPembelianProses');
+    Route::get('/hapus-pembelian/{id}', 'PembayaranController@hapusPembelian');
+    Route::post('/hapus-pembelian/{id}', 'PembayaranController@hapusPembelianProses');
+    Route::post('/tambah-pembelian', 'PembayaranController@tambahPembelian');
     Route::get('/pembayaran', 'PembayaranController@webPembayaran');
     Route::get('/edit-pembayaran/{id}', 'PembayaranController@editPembayaran');
     Route::post('/edit-pembayaran/{id}', 'PembayaranController@editPembayaranProses');

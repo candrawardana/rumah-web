@@ -3,9 +3,10 @@
 Pembayaran
 @endsection
 @section('subtitle')
-              <li class="breadcrumb-item active">Pembayaran</li>
+              <li class="breadcrumb-item active">Pembayaran Anggota</li>
 @endsection
 @section('content')
+@if(\Auth::user() && \Auth::user()->jenis == 'Administrator')
 <div class="row" style="margin-top: 40px">
 	<div class="col s12">
 		<ul class="collapsible">
@@ -60,6 +61,7 @@ Pembayaran
 		</ul>
 	</div>
 </div>
+@endif
 <div class="row">
 	<nav>
 	    <div class="nav-wrapper">
