@@ -21,15 +21,16 @@ if(!function_exists('hitung_pembelian_koperasi')){
     function hitung_pembelian_koperasi(Pembelian $pembelian){
         $total_jual = $pembelian->jual*$pembelian->terjual;
         $modal_jual = $pembelian->jumlah*$pembelian->modal;
-        $selisih_jual = ($pembelian->jual-$pembelian->modal)*$pembelian->terjual;
+        $selisih = ($pembelian->jual-$pembelian->modal)*$pembelian->terjual;
         $untung = $total_jual - $modal_jual;
         //tunggu yang dipakai, selisih jual atau untung
-        $dipakai = $untung;
-        $anggota = 0.1*$dipakai;
-        $koperasi = 0.7*$dipakai;
-        $petugas = 0.1*$dipakai;
-        $yayasan = 0.1*$dipakai;
-        return compact("total_jual","selisih_jual","untung","anggota","koperasi","petugas","yayasan");
+        $selisih_jual = $untung;
+
+        $anggota = 0.1*$selisih_jual;
+        $koperasi = 0.7*$selisih_jual;
+        $petugas = 0.1*$selisih_jual;
+        $yayasan = 0.1*$selisih_jual;
+        return compact("total_jual","selisih_jual","anggota","koperasi","petugas","yayasan");
     }
 }
 

@@ -28,25 +28,32 @@ class PembayaranController extends Controller
       $pembayaran->pembuat = detail_pembuat($pembayaran->user_id);
       return response()->json(['result' => 'success', 'title' => 'Pembayaran berhasil ditemukan','data'=>$pembayaran]);
     }
-    public function webPembayaran(Request $request){
+    public function webPembayaran(Request $request, $cetak=""){
       $q="";
       $Pembayaran = Pembayaran::orderBy("pembayaran_anggota.tanggal","desc");
       $Pembayaran = $Pembayaran->leftJoin("users","pembayaran_anggota.user_id","=","users.id");
       $Pembayaran = $Pembayaran->select("users.name","pembayaran_anggota.*");
-      if(Auth::user()->jenis!="Administrator"){
-        $Pembayaran = $Pembayaran->where("user_id",Auth::user()->id);
+      $pengguna = "";
+      if($request->q!="" && $request->q!=null){
+        $q=$request->q;
       }
-      else{
-        if($request->has('q')){
-          if($request->q!="" && $request->q!=null){
-            $q=$request->q;
-            $Pembayaran = $Pembayaran->where("users.name","like","%".$q."%");
-          }
-        }
+      if(Auth::user()->jenis!="Administrator"){
+        $q = $Auth::user()->username;
+      }
+      $pengguna = "";
+      if($q!=""){
+        $Pembayaran = $Pembayaran->where("users.username",$q);
+        $User = User::where("username",$q)->first();
+        if($User)
+          $pengguna = $User->name;
+      }
+      if($cetak=="cetak"){
+        $Pembayaran = $Pembayaran->get();
+        return view("admin.cetak-pembayaran",compact("Pembayaran","q","pengguna"));
       }
       $Pembayaran = $Pembayaran->paginate(50);
       $Pembayaran->appends(['q' => $q]);
-      return view("admin.pembayaran",compact("Pembayaran","q"));
+      return view("admin.pembayaran",compact("Pembayaran","q","pengguna"));
     }
     public function editPembayaran($id){
       if(Auth::user()->jenis!="Administrator"){
@@ -136,24 +143,27 @@ class PembayaranController extends Controller
       $Pembelian = Pembelian::orderBy("pembelian_koperasi.nama","desc");
       $Pembelian = $Pembelian->leftJoin("users","pembelian_koperasi.user_id","=","users.id");
       $Pembelian = $Pembelian->select("users.name","pembelian_koperasi.*");
+      $pengguna = "";
       if($q!=""){
         $Pembelian = $Pembelian->where("users.username",$q);
+        $User = User::where("username",$q)->first();
+        if($User)
+          $pengguna = $User->name;
       }
       $Pembelian = $Pembelian->get();
       $total=[];
       foreach($Pembelian as $p){
         $p->hitung = hitung_pembelian_koperasi($p);
       }
-      return view($view,compact("Pembelian","total","q"));
+      return view($view,compact("Pembelian","total","q","pengguna"));
     }
-    public function webPembelian(Request $request){
+    public function webPembelian(Request $request, $cetak=""){
       $q="";
-      if(Auth::user()->jenis!="Administrator"){
-        return view("errors.404");
-      }
       if($request->has('q')){
         $q=$request->q;
       }
+      if($cetak=="cetak")
+        return $this->pembelian($q,"admin.cetak-pembelian");
       return $this->pembelian($q,"admin.pembelian");
     }
     public function editPembelian($id){
@@ -273,15 +283,13 @@ class PembayaranController extends Controller
     }
 
 
-    public function bagiHasil(Request $request){
-      $pembayaran = Pembayaran::orderBy("tanggal","desc");
-      if(Auth::user()->jenis!="Administrator"){
-        $pembayaran = $pembayaran->where("user_id",Auth::user()->id);
+    public function bagiHasil(Request $request, $cetak=""){
+      $q="";
+      if($request->has('q')){
+        $q=$request->q;
       }
-      $pembayaran = $pembayaran->paginate(50);
-      foreach($pembayaran as $b){
-        $b->pembuat = detail_pembuat($b->user_id);
-      }
-      return response()->json(['result' => 'success', 'title' => 'Pembayaran berhasil ditemukan','data'=>$pembayaran]);
+      if($cetak=="cetak")
+        return $this->pembelian($q,"admin.cetak-bagi-hasil");
+      return $this->pembelian($q,"admin.bagi-hasil");
     }
 }

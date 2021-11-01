@@ -73,19 +73,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/santri/{id}/edit', 'SantriController@editSantri');
 
 
-    Route::get('/pembelian', 'PembayaranController@webPembelian');
+    Route::get('/pembelian/{cetak?}', 'PembayaranController@webPembelian');
     Route::get('/edit-pembelian/{id}', 'PembayaranController@editPembelian');
     Route::post('/edit-pembelian/{id}', 'PembayaranController@editPembelianProses');
     Route::get('/hapus-pembelian/{id}', 'PembayaranController@hapusPembelian');
     Route::post('/hapus-pembelian/{id}', 'PembayaranController@hapusPembelianProses');
     Route::post('/tambah-pembelian', 'PembayaranController@tambahPembelian');
-    Route::get('/pembayaran', 'PembayaranController@webPembayaran');
+    Route::get('/pembayaran/{cetak?}', 'PembayaranController@webPembayaran');
     Route::get('/edit-pembayaran/{id}', 'PembayaranController@editPembayaran');
     Route::post('/edit-pembayaran/{id}', 'PembayaranController@editPembayaranProses');
     Route::get('/hapus-pembayaran/{id}', 'PembayaranController@hapusPembayaran');
     Route::post('/hapus-pembayaran/{id}', 'PembayaranController@hapusPembayaranProses');
     Route::post('/tambah-pembayaran', 'PembayaranController@tambahPembayaran');
-    Route::get('/bagi-hasil', 'PembayaranController@bagiHasil');
+    Route::get('/bagi-hasil/{cetak?}', 'PembayaranController@bagiHasil');
 
     Route::get('/potongan-tabungan', 'SantriController@potonganTabungan');
     Route::post('/potongan-tabungan', 'SantriController@potonganTabunganProses');

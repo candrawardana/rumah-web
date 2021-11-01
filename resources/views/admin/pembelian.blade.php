@@ -1,9 +1,19 @@
 @extends('template.welcome')
 @section('title')
 Pembelian Koperasi
+@if($pengguna!="")
+ {{$pengguna}}
+@endif
 @endsection
 @section('subtitle')
-              <li class="breadcrumb-item active">Pembelian Koperasi</li>
+@if($pengguna!="")
+              <li class="breadcrumb-item"><a href="{{ url('pembelian') }}">Pembelian Koperasi</a></li>
+              <li class="breadcrumb-item active">Semua Pembelian {{ $pengguna }}</li>
+@else
+<li class="breadcrumb-item active">
+	Pembelian Koperasi
+</li>
+@endif
 @endsection
 @section('content')
 @if(\Auth::user() && \Auth::user()->jenis == 'Administrator')
@@ -20,7 +30,7 @@ Pembelian Koperasi
 						@csrf
 						<!-- USERNAME -->
 						<div class="input-field">
-							<input name="username" id="username" type="text" class="validate">
+							<input name="username" id="username" type="text" class="validate" value="{{ $q }}">
 							<label for="username">Username</label>
 						</div>
 						<!-- NILAI -->
@@ -100,8 +110,8 @@ Pembelian Koperasi
 		<table class="responsive-table">
 			<thead>
 				<tr>
-					@if(\Auth::user() && \Auth::user()->jenis == 'Administrator')
-					<th>Pemilik</th>
+					@if($pengguna=="")
+					<th>PENGGUNA</th>
 					@endif
 					<th>TANGGAL</th>
 					<th>NO. FAKTUR</th>
@@ -120,17 +130,17 @@ Pembelian Koperasi
 				@endphp
 				@foreach($Pembelian as $p)
 						<tr>
-							@if(\Auth::user() && \Auth::user()->jenis == 'Administrator')
+							@if($pengguna=="")
 							<td>{{ $p->name }}</td>
 							@endif
 							<td>{{ $p->tanggal }}</td>
 							<td>{{ $p->faktur }}</td>
 							<td>{{ $p->kode }}</td>
 							<td>{{ $p->nama }}</td>
-							<td>Rp.</td>
+							<td width="20">Rp.</td>
 							<td>{{ nomor($p->modal) }}</td>
 							<td>{{ $p->terjual }} dari {{ $p->jumlah }}</td>
-							<td>Rp.</td>
+							<td width="20">Rp.</td>
 							<td>{{ nomor($p->jual) }}</td>
 							<td>{{ $p->hitung["total_jual"] }}</td>
 							<td>
@@ -146,5 +156,14 @@ Pembelian Koperasi
 			</tbody>
 		</table>
 	</div>
+</div>
+<div class="row" style="margin-top: 40px">
+	<form action="{{ url('pembelian/cetak') }}" target="_blank">
+		<div align="right">
+			<input type="hidden" name="q" value="{{ $q }}">
+			<button class="btn green waves-effect waves-light" type="submit" name="submit">Cetak	<i class="material-icons right">print</i>
+			</button>
+		</div>
+	</form>
 </div>
 @endsection
