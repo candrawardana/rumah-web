@@ -72,7 +72,6 @@ class PenggunaController extends Controller
       }
         $rules = [
             'name'                  => 'required|min:3|max:50',
-            'password'              => 'required',
             'username'				=> 'required',
             'jenis'                 => 'required'
         ];
@@ -81,14 +80,13 @@ class PenggunaController extends Controller
             'name.required'         => 'Nama Lengkap wajib diisi',
             'name.min'              => 'Nama lengkap minimal 3 karakter',
             'name.max'              => 'Nama lengkap maksimal 35 karakter',
-            'password.required'     => 'Password wajib diisi',
             'tipe.required'         => 'Tipe wajib diisi',
         ];
   
         $validator = Validator::make($request->all(), $rules, $messages);
   
         if($validator->fails()){
-            Session::flash('errors', 'Gagal, coba isi dengan benar');
+            Session::flash('error', 'Gagal, coba isi dengan benar');
             return Redirect::back();
         }
   		$id=0;
@@ -99,12 +97,17 @@ class PenggunaController extends Controller
   		$user = User::find($id);
   		if(!$user){
 	        $user = new User;
+            if(strlen($request->password)<8){
+                Session::flash('error', 'Gagal, coba isi dengan benar');
+                return Redirect::back();
+            }
   		}
         $user->name = ucwords(strtolower($request->name));
         $user->username = $request->username;
         if($request->email!="")
             $user->email = strtolower($request->email);
         $user->jenis = $request->jenis;
+        if(strlen($request->password)>7)
         $user->password = Hash::make($request->password);
         $user->alamat = $request->alamat;
         $user->ktp = $request->ktp;
@@ -132,7 +135,7 @@ class PenggunaController extends Controller
             Session::flash('success', 'Membuat user baru berhasil!');
             return Redirect::back();
         } else {
-            Session::flash('errors', ['' => 'Membuat user baru gagal! Silahkan ulangi lagi']);
+            Session::flash('error', 'Membuat user baru gagal! Silahkan ulangi lagi');
             return Redirect::back();
         }
     }
