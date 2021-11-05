@@ -221,6 +221,13 @@ if (!function_exists('nomor')){
     }
 }
 
+if (!function_exists('semua_ustadz')){
+    function semua_ustadz(){
+        $User = User::where("jenis","Ustadz")->orderBy("name","desc")->select("id","name")->get();
+        return $User;
+    }
+}
+
 if (!function_exists('notifikasi')){
     function notifikasi($semua=0){
         $Notifikasi=new stdClass();
@@ -236,10 +243,19 @@ if (!function_exists('notifikasi')){
     }
 }
 
-if (!function_exists('semua_ustadz')){
-    function semua_ustadz(){
-        $User = User::where("jenis","Ustadz")->orderBy("name","desc")->select("id","name")->get();
-        return $User;
+if (!function_exists('buat_notifikasi')){
+    function buat_notifikasi($user_id, $jenis, $judul, $related_id=null){
+        $Notifikasi=Notifikasi::where("jenis",$jenis)->where("related_id",$related_id)->first();
+        if(!$Notifikasi){
+            $Notifikasi = new Notifikasi();
+            if($related_id!=null)
+                $Notifikasi->related_id = $related_id;
+            $Notifikasi->jenis = $jenis;
+
+        }
+        $Notifikasi->judul = substr($judul,0,255);
+        $Notifikasi->save();
+        return $Notifikasi;
     }
 }
 
