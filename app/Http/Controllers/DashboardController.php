@@ -20,8 +20,14 @@ class DashboardController extends Controller
         return view('normal.policy');
     }
 
-    public function notifikasi()
+    public function notifikasi(Request $request)
     {
+        if($request->has("hapus")){
+            bersih_notifikasi($request->hapus);
+        }
+        if($request->has("bersih")){
+            bersih_notifikasi();
+        }
         return view('normal.notifikasi');
     }
 

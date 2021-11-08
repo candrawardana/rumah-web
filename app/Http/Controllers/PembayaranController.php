@@ -47,9 +47,19 @@ class PembayaranController extends Controller
         if($User)
           $pengguna = $User->name;
       }
+      $jenis="";
+      if($request->has("laporan")){
+        if($request->laporan == "bulan"){
+          $jenis=" Bulanan ".bulan_huruf($request->bulan)." ".$request->tahun;
+          $Pembayaran = $Pembayaran->where("tanggal","LIKE",$request->tahun."-".$request->bulan."-%");
+        }
+        if($request->laporan == "tahun")
+          $jenis=" Tahunan ".$request->tahun;
+          $Pembayaran = $Pembayaran->where("tanggal","LIKE",$request->tahun."-%");
+      }
       if($cetak=="cetak"){
         $Pembayaran = $Pembayaran->get();
-        return view("admin.cetak-pembayaran",compact("Pembayaran","q","pengguna"));
+        return view("admin.cetak-pembayaran",compact("Pembayaran","q","pengguna","jenis"));
       }
       $Pembayaran = $Pembayaran->paginate(50);
       $Pembayaran->appends(['q' => $q]);

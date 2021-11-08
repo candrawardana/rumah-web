@@ -21,10 +21,9 @@ class LihatNotifikasi
         if($request->has("lihat_notifikasi_id")){
             $Notifikasi = Notifikasi::where("id",$request->lihat_notifikasi_id)->where("user_id",Auth::id())->first();
             if($Notifikasi){
-                return $Notifikasi;
                 if($Notifikasi->dilihat!=1){
                     $Notifikasi->dilihat=1;
-                    $Notifikas->save();
+                    $Notifikasi->save();
                 }
                 if($Notifikasi->jenis=="url"){
                     if (! $request->expectsJson()) {

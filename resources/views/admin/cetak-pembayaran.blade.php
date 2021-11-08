@@ -1,7 +1,7 @@
 @extends('template.cetak')
 @section('content')
 			<h5 style="margin-bottom: 30px;"><center>
-				<span style="font-size: 24px;"><strong>Laporan Pembayaran Anggota</strong></span><br>
+				<span style="font-size: 24px;"><strong>Laporan Pembayaran Anggota{{ $jenis }}</strong></span><br>
 				<span style="font-size: 20px;">
 					@if($pengguna=="")
 						Seluruh Koperasi

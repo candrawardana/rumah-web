@@ -33,7 +33,7 @@ class AuthController extends Controller
     public function apiNotifikasi()
     {
         $respon = [
-            'result' => 'info',
+            'result' => 'success',
             'title' => 'orang tua',
             'data' => notifikasi(1)->list
         ];

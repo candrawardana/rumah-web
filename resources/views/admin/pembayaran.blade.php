@@ -130,11 +130,59 @@ Pembayaran
 </div>
 <div class="row" style="margin-top: 40px">
 	<form action="{{ url('pembayaran/cetak') }}" target="_blank">
+		<h5>Cetak Pembayaran</h5><br>
+		<input type="hidden" name="q" value="{{ $q }}">
+		<div class="input-field">
+			<select name="laporan" id="laporan" onchange="ganti_laporan()">
+				<option value="bulan" selected>Bulanan</option>
+				<option value="tahun">Tahunan</option>
+				<option value="semua">Semua</option>
+			</select>
+			<label for="laporan">Jenis Laporan</label>
+		</div>
+		<div class="input-field" id="ftahun">
+			<input type="number" value="{{ date('Y') }}" id="tahun" name="tahun">
+			<label for="tahun">Tahun</label>
+		</div>
+		<div class="input-field" id="fbulan">
+			<select name="bulan" id="bulan">
+				<option value="01" selected>Januari</option>
+				<option value="02">Februari</option>
+				<option value="03">Maret</option>
+				<option value="04">April</option>
+				<option value="05">Mei</option>
+				<option value="06">Juni</option>
+				<option value="07">Juli</option>
+				<option value="08">Agustus</option>
+				<option value="09">September</option>
+				<option value="10">Oktober</option>
+				<option value="11">November</option>
+				<option value="12">Desember</option>
+			</select>
+			<label for="bulan">Bulan</label>
+		</div>
 		<div align="right">
-			<input type="hidden" name="q" value="{{ $q }}">
 			<button class="btn green waves-effect waves-light" type="submit" name="submit">Cetak	<i class="material-icons right">print</i>
 			</button>
 		</div>
 	</form>
 </div>
+@endsection
+@section('script')
+<script>
+	function ganti_laporan(){
+		if($("#laporan").val()=="semua"){
+			$("#ftahun").css("display","none");
+			$("#fbulan").css("display","none");
+		}
+		if($("#laporan").val()=="bulan"){
+			$("#ftahun").css("display","");
+			$("#fbulan").css("display","");
+		}
+		if($("#laporan").val()=="tahun"){
+			$("#ftahun").css("display","");
+			$("#fbulan").css("display","none");
+		}
+	}
+</script>
 @endsection

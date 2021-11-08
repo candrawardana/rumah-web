@@ -228,12 +228,22 @@ if (!function_exists('semua_ustadz')){
     }
 }
 
+if (!function_exists('bersih_notifikasi')){
+    function bersih_notifikasi($id=null){
+        $Notifikasi=new stdClass();
+        if($id==null)
+            Notifikasi::where("user_id",Auth::id())->delete();
+        else
+            Notifikasi::where("user_id",Auth::id())->where("id",$id)->delete();
+    }
+}
+
 if (!function_exists('notifikasi')){
     function notifikasi($semua=0){
         $Notifikasi=new stdClass();
         $list=Notifikasi::where("user_id",Auth::id())->where("dilihat",0)->orderBy("created_at","desc")->limit(5)->get();
         if($semua==1)
-        $list=Notifikasi::where("user_id",Auth::id())->where("dilihat",0)->orderBy("created_at","desc")->get();
+        $list=Notifikasi::where("user_id",Auth::id())->orderBy("created_at","desc")->get();
         foreach($list as $l){
             $l->notifikasi_related=notifikasi_related($l);
         }
@@ -245,15 +255,10 @@ if (!function_exists('notifikasi')){
 
 if (!function_exists('buat_notifikasi')){
     function buat_notifikasi($user_id, $jenis, $judul, $related_id=null){
-        $Notifikasi=Notifikasi::where("jenis",$jenis)->where("related_id",$related_id)->first();
-        if(!$Notifikasi){
-            $Notifikasi = new Notifikasi();
-            if($related_id!=null)
-                $Notifikasi->related_id = $related_id;
-            $Notifikasi->jenis = $jenis;
-
-        }
+        $Notifikasi = new Notifikasi();
         $Notifikasi->judul = substr($judul,0,255);
+        $Notifikasi->save();
+        $Notifikasi->created_at = $Notifikasi->updated_at;
         $Notifikasi->save();
         return $Notifikasi;
     }
@@ -262,10 +267,10 @@ if (!function_exists('buat_notifikasi')){
 if (!function_exists('notifikasi_related')){
     function notifikasi_related(Notifikasi $Notifikasi){
         $icon = "fas fa-envelope";
-        $link = url($Notifikasi->jenis."/".$Notifikasi->related_id);
+        $link = url($Notifikasi->jenis."/".$Notifikasi->related_id."?lihat_notifikasi_id=".$Notifikasi->id);
         if($Notifikasi->jenis=="url"){
             $icon = "fas fa-link";
-            $link = $Notifikasi->related_id;
+            $link = url("notifikasi?lihat_notifikasi_id=".$Notifikasi->id);
         }
         if($Notifikasi->jenis=="santri"){
             $icon = "fas fa-user";
@@ -279,10 +284,12 @@ if (!function_exists('notifikasi_related')){
         if($Notifikasi->jenis=="berita"){
             $icon = "fas fa-globe";
         }
-        if($Notifikasi->jenis=="tabungan"){
-            $icon = "fas fa-cut";
+        if($Notifikasi->jenis=="pembayaran"){
+            $icon = "fas fa-coins";
         }
-
+        if($Notifikasi->jenis=="pembelian"){
+            $icon = "fas fa-shopping-cart";
+        }
         return compact("icon","link");
     }
 }

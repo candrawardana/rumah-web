@@ -146,7 +146,7 @@
           <span class="dropdown-item dropdown-header">{{ notifikasi()->count }} Pemberitahuan</span>
           @foreach(notifikasi()->list as $notifikasi)
           <div class="dropdown-divider"></div>
-          <a href="{{ $notifikasi->notifikasi_related['link'] }}" class="dropdown-item">
+          <a href="{{ $notifikasi->notifikasi_related['link'] }}" target="_blank" class="dropdown-item">
             <i class="{{ $notifikasi->notifikasi_related['icon'] }} mr-2"></i> {{ $notifikasi->judul }}
             <span class="float-right text-muted text-sm">{{ $notifikasi->created_at }}</span>
           </a>
