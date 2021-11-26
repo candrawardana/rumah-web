@@ -365,6 +365,7 @@ class SantriController extends Controller
         $time = strtotime($request->k_tanggal);
         $Kesalahan->tanggal = date('Y-m-d',$time);
         $Kesalahan->save();
+        santri_notifikasi($request->s_nis,"Anak anda telah melakukan kesalahan dengan sanksi ".$request->k_hukuman);
         return Redirect::back()->with("success","Berhasil menambahkan kesalahan");
       }
       return view("errors.404");
@@ -403,14 +404,15 @@ class SantriController extends Controller
         $time = strtotime($request->hb_tanggal);
         $HafalanBaru->tanggal = date('Y-m-d',$time);
         $HafalanBaru->save();
-        return Redirect::back()->with("success","Berhasil menambahkan kesalahan");
+        santri_notifikasi($request->s_nis,"Anak anda baru menghafal surah ".$request->hb_surat);
+        return Redirect::back()->with("success","Berhasil menambahkan");
       }
       return view("errors.404");
     }
     public function hapusHafalanBaru($id){
       if(Auth::user()->jenis=="Ustadz" || Auth::user()->jenis=="Administrator"){
         HafalanBaru::find($id)->delete();
-        return Redirect::back()->with("success","Berhasil menghapus kesalahan");
+        return Redirect::back()->with("success","Berhasil menghapus");
       }
       return view("errors.404");
     }
@@ -440,14 +442,15 @@ class SantriController extends Controller
         $time = strtotime($request->h_tanggal);
         $Hafalan->tanggal = date('Y-m-d',$time);
         $Hafalan->save();
-        return Redirect::back()->with("success","Berhasil menambahkan kesalahan");
+        santri_notifikasi($request->s_nis,"Anak anda baru Muroja'ah juz ".$request->h_juz);
+        return Redirect::back()->with("success","Berhasil menambahkan");
       }
       return view("errors.404");
     }
     public function hapusHafalan($id){
       if(Auth::user()->jenis=="Administrator"){
         Hafalan::find($id)->delete();
-        return Redirect::back()->with("success","Berhasil menghapus kesalahan");
+        return Redirect::back()->with("success","Berhasil menghapus");
       }
       return view("errors.404");
     }
@@ -507,7 +510,8 @@ class SantriController extends Controller
           $Dana->save();
 
         }
-        return Redirect::back()->with("success","Berhasil menambahkan kesalahan");
+        santri_notifikasi($request->s_nis,"Anak anda sekarang punya tabungan sebesar Rp. ".nomor($Dana->dana));
+        return Redirect::back()->with("success","Berhasil menambahkan");
       }
       return view("errors.404");
     }
@@ -554,14 +558,18 @@ class SantriController extends Controller
         $time = strtotime($request->u_tanggal);
         $UangSyariah->tanggal = date('Y-m-d',$time);
         $UangSyariah->save();
-        return Redirect::back()->with("success","Berhasil menambahkan kesalahan");
+        santri_notifikasi($request->s_nis,"Anak anda punya uang syariah yang "
+          .nomor($request->u_keterangan).
+          " sebesar Rp. ".nomor($request->u_nominal)
+        );
+        return Redirect::back()->with("success","Berhasil menambahkan");
       }
       return view("errors.404");
     }
     public function hapusUangSyariah($id){
       if(Auth::user()->jenis=="Administrator"){
         UangSyariah::find($id)->delete();
-        return Redirect::back()->with("success","Berhasil menghapus kesalahan");
+        return Redirect::back()->with("success","Berhasil menghapus");
       }
       return view("errors.404");
     }

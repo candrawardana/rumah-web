@@ -7,6 +7,7 @@ use App\Models\Nodin;
 use App\Models\Notifikasi;
 use App\Models\Dana;
 use App\Models\Pembelian;
+use App\Models\WaliOrangTua;
 
 if(!function_exists('judul_situs')){
     function judul_situs($singkat = 0){
@@ -256,6 +257,9 @@ if (!function_exists('notifikasi')){
 if (!function_exists('buat_notifikasi')){
     function buat_notifikasi($user_id, $jenis, $judul, $related_id=null){
         $Notifikasi = new Notifikasi();
+        $Notifikasi->user_id = $user_id;
+        $Notifikasi->jenis = $jenis;
+        $Notifikasi->related_id = $related_id;
         $Notifikasi->judul = substr($judul,0,255);
         $Notifikasi->save();
         $Notifikasi->created_at = $Notifikasi->updated_at;
@@ -263,7 +267,14 @@ if (!function_exists('buat_notifikasi')){
         return $Notifikasi;
     }
 }
-
+if (!function_exists('santri_notifikasi')){
+    function santri_notifikasi($santri,$notifikasi){
+        $WOT = WaliOrangTua::where("nis_santri",$santri)->get();
+        foreach($WOT as $t){
+            buat_notifikasi($t->user_id,"santri",$notifikasi,$santri);
+        }
+    }
+}
 if (!function_exists('notifikasi_related')){
     function notifikasi_related(Notifikasi $Notifikasi){
         $icon = "fas fa-envelope";
