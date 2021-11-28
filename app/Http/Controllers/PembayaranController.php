@@ -19,7 +19,20 @@ class PembayaranController extends Controller
       foreach($pembayaran as $b){
         $b->pembuat = detail_pembuat($b->user_id);
       }
-      return response()->json(['result' => 'success', 'title' => 'Pembayaran berhasil ditemukan','data'=>$pembayaran]);
+      $Pembelian = null;
+      if($request->has("page") && $request->page > 1){
+      }
+      else{
+        $Pembelian = Pembelian::orderBy("tanggal","desc");
+        if(Auth::user()->jenis!="Administrator"){
+          $Pembelian = $Pembelian->where("user_id",Auth::user()->id);
+        }
+        $Pembelian = $Pembelian->get();
+        foreach($Pembelian as $p){
+          $p->hitung = hitung_pembelian_koperasi($p);
+        }
+      }
+      return response()->json(['result' => 'success', 'title' => 'Pembayaran berhasil ditemukan','data'=>$pembayaran,'Pembelian'=>$Pembelian]);
     }
     public function apiDetailPembayaran($id,Request $request){
       $pembayaran = Pembayaran::find($id);
@@ -29,6 +42,29 @@ class PembayaranController extends Controller
       return response()->json(['result' => 'success', 'title' => 'Pembayaran berhasil ditemukan','data'=>$pembayaran]);
     }
     public function webPembayaran(Request $request, $cetak=""){
+      $pembayaran = Pembayaran::orderBy("tanggal","desc");
+      if(Auth::user()->jenis!="Administrator"){
+        $pembayaran = $pembayaran->where("user_id",Auth::user()->id);
+      }
+      $pembayaran = $pembayaran->paginate(15);
+      foreach($pembayaran as $b){
+        $b->pembuat = detail_pembuat($b->user_id);
+      }
+      $Pembelian = null;
+      if($request->has("page") && $request->page > 1){
+      }
+      else{
+        $Pembelian = Pembelian::orderBy("tanggal","desc");
+        if(Auth::user()->jenis!="Administrator"){
+          $Pembelian = $Pembelian->where("user_id",Auth::user()->id);
+        }
+        $Pembelian = $Pembelian->get();
+        foreach($Pembelian as $p){
+          $p->hitung = hitung_pembelian_koperasi($p);
+        }
+      }
+      return response()->json(['result' => 'success', 'title' => 'Pembayaran berhasil ditemukan','data'=>$pembayaran,'Pembelian'=>$Pembelian]);
+
       $q="";
       $Pembayaran = Pembayaran::orderBy("pembayaran_anggota.tanggal","desc");
       $Pembayaran = $Pembayaran->leftJoin("users","pembayaran_anggota.user_id","=","users.id");
@@ -38,7 +74,7 @@ class PembayaranController extends Controller
         $q=$request->q;
       }
       if(Auth::user()->jenis!="Administrator"){
-        $q = $Auth::user()->username;
+        $q = Auth::user()->username;
       }
       $pengguna = "";
       if($q!=""){
@@ -92,6 +128,8 @@ class PembayaranController extends Controller
       $nilai_awal = $Pembayaran->nilai;
       $Pembayaran->nilai = $request->nilai;
       $Pembayaran->save();
+      buat_notifikasi($Pembayaran->user_id, "pembelian", 
+        "Pembayaran koperasi ".$Pembayaran->jenis." anda diralat, anda membayar sebesar Rp. ".$Pembayaran->nilai,$Pembayaran->id);
       if($request->dana=="1"){
         tambah_dana($nilai_awal+$request->nilai,"k.".$Pembayaran->user_id);
       }
@@ -139,6 +177,8 @@ class PembayaranController extends Controller
       $Pembayaran->save();
       if(!$Pembayaran)
         return redirect()->back()->with("error","Gagal Menyimpan");
+      buat_notifikasi($Pembayaran->user_id, "pembayaran",
+        "Anda telah membayar koperasi ".$Pembayaran->jenis." sebesar Rp. ".$Pembayaran->nilai,$Pembayaran->id);
       if($request->dana=="1"){
         tambah_dana($request->nilai,"k.".$Pembayaran->user_id);
       }
@@ -213,6 +253,8 @@ class PembayaranController extends Controller
       $Pembelian->nama = $request->nama;
       $Pembelian->terjual = $request->terjual;
       $Pembelian->save();
+      buat_notifikasi($Pembelian->user_id, "pembelian", 
+        "Info produk '".$Pembelian->nama."' anda diperbarui admin", $Pembelian->id);
       if($request->dana=="1"){
         tambah_dana($selisih,"k.".$Pembelian->user_id);
       }
@@ -286,6 +328,8 @@ class PembayaranController extends Controller
       $Pembelian->save();
       if(!$Pembelian)
         return redirect()->back()->with("error","Gagal Menyimpan");
+      buat_notifikasi($Pembelian->user_id, "pembelian", 
+        "Anda menambah produk '".$Pembelian->nama."' di koperasi", $Pembelian->id);
       if($request->dana=="1"){
         tambah_dana($harga,"k.".$Pembelian->user_id);
       }

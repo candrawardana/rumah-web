@@ -17,8 +17,8 @@ class Banner extends Migration
             $table->uuid('id')->primary();
             $table->date('tanggal');
             $table->string('thumbnail');
-            $table->string('fitur');
-            $table->string('url_related');
+            $table->string('jenis',10);
+            $table->string('related_id')->nullable();
             $table->timestamps();
         });
     }

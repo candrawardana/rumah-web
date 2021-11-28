@@ -20,7 +20,7 @@ Kesalahan Santri
       <ul class="collapsible">
         <li>
           <div class="collapsible-header green-text">
-            <i class="material-icons">add</i> <strong>Tambah Datfar Kesalahan</strong>
+            <i class="material-icons">add</i> <strong>Tambah Daftar Kesalahan</strong>
           </div>
           <div class="collapsible-body">
             <!-- FORM KESALAHAN -->

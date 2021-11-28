@@ -123,7 +123,10 @@ Route::group(['middleware' => 'lihat_notifikasi'], function () {
         Route::get('migrasi/uang-syariah', 'MigrasiDataController@uangSyariah');
         Route::get('migrasi/pengumuman', 'MigrasiDataController@pengumuman');
         Route::get('migrasi/kegiatan', 'MigrasiDataController@kegiatan');
-
+        Route::get('migrasi/pegawai', 'MigrasiDataController@pegawai');
+        Route::get('migrasi/ayah', 'MigrasiDataController@ayah');
+        Route::get('migrasi/ibu', 'MigrasiDataController@ibu');
+        Route::get('migrasi/user-kosong', 'MigrasiDataController@userKosong');
     });
 
 });

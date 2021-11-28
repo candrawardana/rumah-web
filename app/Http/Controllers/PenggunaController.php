@@ -24,7 +24,9 @@ class PenggunaController extends Controller
                 return response()->json(["result"=>"error","title"=>"Gagal mendapatkan data"]);
         }
         $User->foto = pp_check($User->id);
-        return ["result"=>"success","title"=>"Berhasil mendapatkan data","data"=>$User];
+        $notifikasi = notifikasi();
+        return ["result"=>"success","title"=>"Berhasil mendapatkan data",
+            "data"=>$User,"notifikasi"=>$notifikasi];
     }
     public function webprofil($id=""){
         $proses=@$this->profil($id);

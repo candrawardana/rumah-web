@@ -128,6 +128,7 @@ Pembayaran
 		{!! $Pembayaran->links('template.paginator') !!}
 	</div>
 </div>
+@if(\Auth::user() && \Auth::user()->jenis == 'Administrator')
 <div class="row" style="margin-top: 40px">
 	<form action="{{ url('pembayaran/cetak') }}" target="_blank">
 		<h5>Cetak Pembayaran</h5><br>
@@ -167,6 +168,7 @@ Pembayaran
 		</div>
 	</form>
 </div>
+@endif
 @endsection
 @section('script')
 <script>

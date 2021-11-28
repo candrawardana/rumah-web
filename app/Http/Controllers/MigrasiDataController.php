@@ -15,6 +15,10 @@ use App\Models\Tabungan;
 use App\Models\UangSyariah;
 use App\Models\Pengumuman;
 use App\Models\Kegiatan;
+use App\Models\Pegawai;
+use App\Models\User;
+use Hash;
+use Storage;
 
 class MigrasiDataController extends Controller
 {
@@ -159,4 +163,149 @@ class MigrasiDataController extends Controller
             return "<a href='".url("migrasi/kegiatan?page=".$p)."'>Lanjut ke ".$p."</a>";
         }
     }
+    public function pegawai(Request $request){
+        if(Auth::user()->jenis=="Administrator"){
+            $p = 1;
+            if($request->has("page")){
+                $p=$request->page;
+            }
+            $Pegawaix = Pegawai::orderBy("p_induk","asc")->paginate(10);
+            $count = 0;
+            foreach($Pegawaix as $Pegawai){
+                $User = User::where("username",$Pegawai->p_username)->first();
+                if(!$User){
+                    $User = new User();
+                    $User->name = $Pegawai->p_nama;
+                    $User->username = $Pegawai->p_username;
+                    $User->email = $Pegawai->p_email;
+                    $User->label_id = $Pegawai->p_induk;
+                    $User->password = Hash::make($Pegawai->p_password);
+                    $User->jenis = $Pegawai->p_level;
+                    $User->pekerjaan = $Pegawai->p_jabatan;
+                    $User->hp = $Pegawai->p_telp;
+                    $User->alamat = $Pegawai->p_alamat;
+                    $User->save();
+                    $host = gambar_second($Pegawai->p_foto);
+                    $ch = curl_init($host);
+                    curl_setopt($ch, CURLOPT_HEADER, 0);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
+                    $result = curl_exec($ch);
+                    curl_close($ch);
+                    Storage::makeDirectory("pp/".$User->id);
+                    $fp = fopen(Storage::path("pp/".$User->id."/convert.jpg",$result),'x');
+                    fwrite($fp, $result);
+                    fclose($fp);
+
+                }
+                $count++;
+            }
+            $p++;
+            if($count==0)
+                return "selesai";
+            return "<a href='".url("migrasi/pegawai?page=".$p)."'>Lanjut ke ".$p."</a>";
+        }
+    }
+    public function ayah(Request $request){
+        if(Auth::user()->jenis=="Administrator"){
+            $p = 1;
+            if($request->has("page")){
+                $p=$request->page;
+            }
+            $Ayahx = Ayah::orderBy("a_id","asc")->paginate(200);
+            $count = 0;
+            foreach($Ayahx as $Ayah){
+                $User = User::where("username",$Ayah->a_id)->first();
+                if(!$User){
+                    $Santri=Santri::where("s_nis",$Ayah->s_nis)->first();
+                    $User = new User();
+                    $User->name = $Ayah->a_nama;
+                    $User->username = $Ayah->a_id;
+                    $User->label_id = $Ayah->a_id;
+                    if($Santri)
+                        $User->password = Hash::make($Santri->s_password);
+                    else{
+                        $User->password = Hash::make($Ayah->a_id);
+                    }
+                    $User->jenis = "ayah_santri";
+                    $User->pekerjaan = $Ayah->a_pekerjaan;
+                    $User->pendidikan = $Ayah->a_pendidikan;
+                    $User->hp = $Ayah->a_telp;
+                    $User->wa = $Ayah->a_wa;
+                    $User->alamat = $Ayah->a_alamat;
+                    $User->lahir = $Ayah->a_tmplahir.", ".$Ayah->a_tgllahir;
+                    $User->save();
+                    $WaliOrangTua = WaliOrangTua::where("nis_santri",$Ayah->s_nis)
+                        ->where("user_id",$User->id)
+                        ->first();
+                    if(!$WaliOrangTua){
+                        $WaliOrangTua = new WaliOrangTua();
+                        $WaliOrangTua->nis_santri = $Ayah->s_nis;
+                        $WaliOrangTua->user_id = $User->id;
+                        $WaliOrangTua->save();
+                    }          
+                }
+                $count++;
+            }
+            $p++;
+            if($count==0)
+                return "selesai";
+            return "<a href='".url("migrasi/ayah?page=".$p)."'>Lanjut ke ".$p."</a>";
+        }
+    }
+    public function ibu(Request $request){
+        if(Auth::user()->jenis=="Administrator"){
+            $p = 1;
+            if($request->has("page")){
+                $p=$request->page;
+            }
+            $Ibux = Ibu::orderBy("i_id","asc")->paginate(200);
+            $count = 0;
+            foreach($Ibux as $Ibu){
+                $User = User::where("username",$Ibu->a_id)->first();
+                if(!$User){
+                    $Santri=Santri::where("s_nis",$Ibu->s_nis)->first();
+                    $User = new User();
+                    $User->name = $Ibu->i_nama;
+                    $User->username = $Ibu->i_id;
+                    $User->label_id = $Ibu->i_id;
+                    if($Santri)
+                        $User->password = Hash::make($Santri->s_password);
+                    else{
+                        $User->password = Hash::make($ibu->i_id);
+                    }
+                    $User->jenis = "ibu_santri";
+                    $User->pekerjaan = $Ibu->i_pekerjaan;
+                    $User->pendidikan = $Ibu->i_pendidikan;
+                    $User->hp = $Ibu->i_telp;
+                    $User->wa = $Ibu->i_wa;
+                    if($Santri)
+                        $User->alamat = $Santri->s_alamat;
+                    $User->lahir = $Ibu->i_tmplahir.", ".$Ibu->i_tgllahir;
+                    $User->save();
+                    $WaliOrangTua = WaliOrangTua::where("nis_santri",$Ibu->s_nis)
+                        ->where("user_id",$User->id)
+                        ->first();
+                    if(!$WaliOrangTua){
+                        $WaliOrangTua = new WaliOrangTua();
+                        $WaliOrangTua->nis_santri = $Ibu->s_nis;
+                        $WaliOrangTua->user_id = $User->id;
+                        $WaliOrangTua->save();
+                    }          
+                }
+                $count++;
+            }
+            $p++;
+            if($count==0)
+                return "selesai";
+            return "<a href='".url("migrasi/ibu?page=".$p)."'>Lanjut ke ".$p."</a>";
+        }
+    }
+    public function userKosong(Request $request){
+        if(Auth::user()->jenis=="Administrator"){
+            User::where("name","")->delete();
+            return "selesai";
+        }
+    }
+
 }

@@ -600,11 +600,23 @@
       <li><a href="{{ url('/') }}"><i class="material-icons left">home</i>Dashboard</a></li>
       @if(\Auth::user())
       <li><a href="{{ url('santri') }}"><i class="material-icons left">person</i>Data Santri</a></li>
-      <li><a href="{{ url('pengumuman') }}"><i class="material-icons left">notifications</i>Pengumuman</a></li>
+      <li><a href="{{ url('notifikasi') }}"><i class="material-icons left">notifications</i>
+        Notifikasi ({{ notifikasi()->count }})
+      </a></li>
+      @endif
+      <li><a class="nav-trigger" href="#!" data-target="artikelmenu"><i class="material-icons right">arrow_drop_down</i>Artikel</a><ul id="artikelmenu" class="dropdown-content" tabindex="0">
+      @if(\Auth::user())
+      <li><a href="{{ url('pengumuman') }}"><i class="material-icons left">announcement</i>Pengumuman</a></li>
       @endif
       <li><a href="{{ url('berita') }}"><i class="material-icons left">public</i>Berita</a></li>
       <li><a href="{{ url('kegiatan') }}"><i class="material-icons left">group</i>Kegiatan</a></li>
+      </ul></li>
       @if(\Auth::user())
+      <li><a class="nav-trigger" href="#!" data-target="artikelmenu2"><i class="material-icons right">arrow_drop_down</i>Koperasi</a><ul id="artikelmenu2" class="dropdown-content" tabindex="0">
+      <li><a href="{{ url('pembayaran') }}">Pembayaran Anggota</a></li>
+      <li><a href="{{ url('pembelian') }}">Pembelian Koperasi</a></li>
+      <li><a href="{{ url('bagi-hasil') }}">Bagi Hasil</a></li>
+      </ul></li>
       <li><a href="{{ url('logout') }}"><i class="material-icons left">close</i>Logout</a></li>
       @else
       <li><a href="{{ url('login') }}"><i class="material-icons left">lock</i>Login</a></li>
