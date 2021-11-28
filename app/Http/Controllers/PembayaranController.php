@@ -19,7 +19,7 @@ class PembayaranController extends Controller
       foreach($pembayaran as $b){
         $b->pembuat = detail_pembuat($b->user_id);
       }
-      $Pembelian = null;
+      $Pembelian = [];
       if($request->has("page") && $request->page > 1){
       }
       else{
@@ -42,29 +42,6 @@ class PembayaranController extends Controller
       return response()->json(['result' => 'success', 'title' => 'Pembayaran berhasil ditemukan','data'=>$pembayaran]);
     }
     public function webPembayaran(Request $request, $cetak=""){
-      $pembayaran = Pembayaran::orderBy("tanggal","desc");
-      if(Auth::user()->jenis!="Administrator"){
-        $pembayaran = $pembayaran->where("user_id",Auth::user()->id);
-      }
-      $pembayaran = $pembayaran->paginate(15);
-      foreach($pembayaran as $b){
-        $b->pembuat = detail_pembuat($b->user_id);
-      }
-      $Pembelian = null;
-      if($request->has("page") && $request->page > 1){
-      }
-      else{
-        $Pembelian = Pembelian::orderBy("tanggal","desc");
-        if(Auth::user()->jenis!="Administrator"){
-          $Pembelian = $Pembelian->where("user_id",Auth::user()->id);
-        }
-        $Pembelian = $Pembelian->get();
-        foreach($Pembelian as $p){
-          $p->hitung = hitung_pembelian_koperasi($p);
-        }
-      }
-      return response()->json(['result' => 'success', 'title' => 'Pembayaran berhasil ditemukan','data'=>$pembayaran,'Pembelian'=>$Pembelian]);
-
       $q="";
       $Pembayaran = Pembayaran::orderBy("pembayaran_anggota.tanggal","desc");
       $Pembayaran = $Pembayaran->leftJoin("users","pembayaran_anggota.user_id","=","users.id");
