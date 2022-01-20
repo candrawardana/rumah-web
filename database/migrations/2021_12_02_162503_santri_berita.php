@@ -13,7 +13,14 @@ class SantriBerita extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('santri_berita', function ($table) {
+            $table->uuid('id')->primary();
+            // $table->morphs('tokenable');
+            $table->foreignUuid('berita_id');
+            $table->foreign('berita_id')->references('id')->on('berita')->onDelete('cascade');
+            $table->string('s_nis',15);
+            $table->foreign('s_nis')->references('s_nis')->on('santri')->onDelete('cascade');
+        });
     }
 
     /**
@@ -24,5 +31,6 @@ class SantriBerita extends Migration
     public function down()
     {
         //
+        Schema::dropIfExists('santri_berita');
     }
 }
