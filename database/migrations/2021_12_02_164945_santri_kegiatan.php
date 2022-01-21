@@ -17,9 +17,7 @@ class SantriKegiatan extends Migration
             $table->uuid('id')->primary();
             // $table->morphs('tokenable');
             $table->foreignUuid('kegiatan_id');
-            $table->foreign('kegiatan_id')->references('id')->on('kegiatan')->onDelete('cascade');
             $table->string('s_nis',15);
-            $table->foreign('s_nis')->references('s_nis')->on('santri')->onDelete('cascade');
         });
     }
 

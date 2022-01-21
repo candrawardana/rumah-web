@@ -19,7 +19,6 @@ class SantriBerita extends Migration
             $table->foreignUuid('berita_id');
             $table->foreign('berita_id')->references('id')->on('berita')->onDelete('cascade');
             $table->string('s_nis',15);
-            $table->foreign('s_nis')->references('s_nis')->on('santri')->onDelete('cascade');
         });
     }
 

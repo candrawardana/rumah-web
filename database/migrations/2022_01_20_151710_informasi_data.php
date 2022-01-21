@@ -13,7 +13,12 @@ class InformasiData extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('informasi_data', function (Blueprint $table) {
+            $table->string('id',20)->primary();
+            $table->string('text',50)->nullable();
+            $table->bigInteger('integer')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +28,6 @@ class InformasiData extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('informasi_data');
     }
 }

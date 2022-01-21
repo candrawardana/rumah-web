@@ -13,7 +13,16 @@ class BeritaKoperasi extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('berita_koperasi', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('user_id')->nullable();
+            $table->date('tanggal');
+            $table->string('tempat',50);
+            $table->string('title');
+            $table->text('content');
+            $table->string('thumbnail');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +32,6 @@ class BeritaKoperasi extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('berita_koperasi');
     }
 }
