@@ -26,7 +26,7 @@ Berita
       </a>
     </div>
     <div class="col s12">
-      <p>{{ $Berita->content }}</p>
+      <p>{!! nl2br(e($Berita->content)) !!}</p>
     </div>
   </div>
 

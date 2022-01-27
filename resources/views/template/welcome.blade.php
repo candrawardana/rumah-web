@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="{{ url('Assets/images/icon.png') }}?d=2" type="image/png">
+  <link rel="icon" href="{{ url('Assets/images/icon.png') }}?d=4" type="image/png">
   <title>@yield('title',judul_situs()) || {{ judul_situs() }}</title>
   <link href="https://fonts.googleapis.com/css?family=Julius+Sans+One" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -123,7 +123,7 @@
 
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="{{ url('Assets/images/icon.jpeg') }}" alt="{{ judul_situs() }}" height="60" width="60">
+    <img class="animation__shake" src="{{ url('Assets/images/icon.jpeg') }}?d=4" alt="{{ judul_situs() }}" height="60" width="60">
   </div>
 
   <!-- Navbar -->
@@ -172,7 +172,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link" style="background: #00a85a;">
-      <img src="{{ url('Assets/images/icon.jpeg') }}" alt="{{ judul_situs() }}" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img src="{{ url('Assets/images/icon.jpeg') }}?d=4" alt="{{ judul_situs() }}" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">{{ judul_situs(1) }}</span>
     </a>
 
@@ -224,6 +224,14 @@
               <i class="nav-icon fas fa-globe"></i>
               <p>
                 Berita
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url('berita-koperasi') }}" class="nav-link">
+              <i class="nav-icon fas fa-globe"></i>
+              <p>
+                Berita Koperasi
               </p>
             </a>
           </li>
@@ -499,7 +507,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="icon" href="{{ url('Assets/images/icon.png') }}?d=2" type="image/png">
+  <link rel="icon" href="{{ url('Assets/images/icon.png') }}?d=4" type="image/png">
   <link rel="stylesheet" href="{{ url('alertify/alertify.css') }}">
   <link rel="stylesheet" href="{{ url('toastr/toastr.min.css') }}">
 <link href="https://fonts.googleapis.com/css?family=Julius+Sans+One" rel="stylesheet">
@@ -577,7 +585,7 @@
   <div class="container hide-on-med-and-down">
     <div class="row">
   <div class="col m2" align="right">
-    <img src="{{ url('Assets/images/icon.jpeg') }}" alt="{{ judul_situs() }}" width="130px" style="margin-top: 20px;">
+    <img src="{{ url('Assets/images/icon.jpeg') }}?d=4" alt="{{ judul_situs() }}" width="130px" style="margin-top: 20px;">
   </div>
   <div class="col m6">
     <p class="logo-brand">

@@ -30,6 +30,8 @@ Route::group(['middleware' => ['auth:sanctum',"lihat_notifikasi"]], function () 
 
 	Route::get('/berita', 'BeritaController@apiBerita');
 	Route::get('/berita/{id}', 'BeritaController@apiDetailBerita');
+	Route::get('/berita-koperasi', 'BeritaKoperasiController@apiBerita');
+	Route::get('/berita-koperasi/{id}', 'BeritaKoperasiController@apiDetailBerita');
 
 	Route::get('/santri', 'SantriController@apiSantri');
 	Route::get('/santri/{id}', 'SantriController@apiDetailSantri');

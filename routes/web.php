@@ -27,7 +27,10 @@ Route::group(['middleware' => 'lihat_notifikasi'], function () {
 
     Route::get('/berita', 'BeritaController@webBerita');
     Route::get('/berita/{id}', 'BeritaController@webDetailBerita');
+    Route::get('/berita-koperasi', 'BeritaKoperasiController@webBerita');
+    Route::get('/berita-koperasi/{id}', 'BeritaKoperasiController@webDetailBerita');
     Route::get('/berita/{id}/{thumbnail}', 'BeritaController@thumbnail');
+    Route::get('/beritakoperasi/{id}/{thumbnail}', 'BeritaKoperasiController@thumbnail');
 
     Route::get('/gallery/{file}', 'DashboardController@gallery');
     Route::get('/foto/{file}/{file2?}', 'SantriController@foto');
@@ -47,6 +50,10 @@ Route::group(['middleware' => 'lihat_notifikasi'], function () {
 
         Route::post('/tambah-berita', 'BeritaController@tambahBerita');
         Route::get('/hapus-berita/{id}', 'BeritaController@hapusBerita'); 
+
+        Route::post('/tambah-berita-koperasi', 'BeritaKoperasiController@tambahBerita');
+        Route::get('/hapus-berita-koperasi/{id}', 'BeritaKoperasiController@hapusBerita'); 
+
 
         Route::get('/santri', 'SantriController@webSantri');
         Route::get('/santri/{id}', 'SantriController@webDetailSantri');
